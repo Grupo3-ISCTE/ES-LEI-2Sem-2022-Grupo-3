@@ -2,7 +2,7 @@
 
 * A. Sampaio
 * B. Santos
-* J. Travassos Jr.
+* J. Travassos Jr. | 93089
 * O. Silva | 92387
-* S. Correia
+* S. Correia | 92619
 * S. Vieira
