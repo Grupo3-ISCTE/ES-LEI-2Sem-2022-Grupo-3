@@ -1,6 +1,6 @@
 /nbproject/private/
 /target/
-/javadoc/
+# /javadoc/ #
 
 # Eclipse files #
 /.classpath
