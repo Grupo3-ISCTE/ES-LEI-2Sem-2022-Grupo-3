@@ -37,6 +37,9 @@
 package org.jfree.data.flow;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import org.jfree.chart.internal.Args;
 import org.jfree.chart.api.PublicCloneable;
@@ -151,4 +154,25 @@ public class NodeKey <K extends Comparable<K>> implements PublicCloneable, Seria
         return super.clone();
     }
 
+    /**
+     * Returns a list of flow keys for all the flows coming into this node.
+     *
+     *
+     * @param defaultFlowDataset@return A list of flow keys (possibly empty but never {@code null}).
+     */
+    public List<FlowKey<K>> getInFlows(DefaultFlowDataset defaultFlowDataset) {
+        Args.nullNotPermitted(this, "nodeKey");
+        if (getStage() == 0) {
+            return Collections.EMPTY_LIST;
+        }
+        List<FlowKey<K>> result = new ArrayList<>();
+
+        for (Object flowKey : defaultFlowDataset.flows.keySet()) {
+            FlowKey<K> f = (FlowKey<K>) flowKey;
+            if (f.getStage() == getStage() - 1 && f.getDestination().equals(getNode())) {
+                result.add(f);
+            }
+        }
+        return result;
+    }
 }
