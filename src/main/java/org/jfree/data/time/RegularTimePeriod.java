@@ -386,4 +386,22 @@ public abstract class RegularTimePeriod implements TimePeriod, Comparable,
         return String.valueOf(getStart());
     }
 
+    /**
+     * Returns the x-value for a time period.
+     *
+     *
+     * @param dynamicTimeSeriesCollection@return The x-value.
+     */
+    long getX(DynamicTimeSeriesCollection dynamicTimeSeriesCollection) {
+        switch (dynamicTimeSeriesCollection.position) {
+            case (DynamicTimeSeriesCollection.START) :
+                return getFirstMillisecond(dynamicTimeSeriesCollection.workingCalendar);
+            case (DynamicTimeSeriesCollection.MIDDLE) :
+                return getMiddleMillisecond(dynamicTimeSeriesCollection.workingCalendar);
+            case (DynamicTimeSeriesCollection.END) :
+                return getLastMillisecond(dynamicTimeSeriesCollection.workingCalendar);
+            default:
+                return getMiddleMillisecond(dynamicTimeSeriesCollection.workingCalendar);
+        }
+     }
 }

@@ -36,6 +36,7 @@
 
 package org.jfree.data.time.ohlc;
 
+import org.jfree.chart.internal.Args;
 import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.time.RegularTimePeriod;
 
@@ -137,4 +138,16 @@ public class OHLCItem extends ComparableObjectItem {
         }
     }
 
+    /**
+     * Adds a data item to the series.  The values from the item passed to
+     * this method will be copied into a new object.
+     *
+     *
+     * @param ohlcSeries@since 1.0.17
+     */
+    public void add(OHLCSeries ohlcSeries) {
+        Args.nullNotPermitted(this, "item");
+        ohlcSeries.add(getPeriod(), getOpenValue(), getHighValue(),
+                getLowValue(), getCloseValue());
+    }
 }
