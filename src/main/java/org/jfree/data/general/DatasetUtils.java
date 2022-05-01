@@ -2137,10 +2137,7 @@ public final class DatasetUtils {
                 Number number = dataset.getValue(series, item);
                 if (number != null) {
                     hasValidData = true;
-                    double value = number.doubleValue();
-                    if (value > 0.0) {
-                        total = total + value;
-                    }
+                    total = getTotal(total, number);
                 }
             }
             maximum = Math.max(maximum, total);
@@ -2149,6 +2146,14 @@ public final class DatasetUtils {
             result = maximum;
         }
         return result;
+    }
+
+    private static double getTotal(double total, Number number) {
+        double value = number.doubleValue();
+        if (value > 0.0) {
+            total = total + value;
+        }
+        return total;
     }
 
     /**
