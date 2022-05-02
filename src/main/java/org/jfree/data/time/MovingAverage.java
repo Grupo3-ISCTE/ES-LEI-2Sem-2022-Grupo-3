@@ -180,10 +180,22 @@ public class MovingAverage {
 
         Args.nullNotPermitted(source, "source");
         if (pointCount < 2) {
-            throw new IllegalArgumentException("periodCount must be greater " 
+            throw new IllegalArgumentException("periodCount must be greater "
                     + "than or equal to 2.");
         }
 
+        TimeSeries<S> result = removePoint(source, name, pointCount);
+        return result;
+    }
+
+    /**
+     * @param <S>
+     * @param source
+     * @param name
+     * @param pointCount
+     * @return
+     */
+    private static <S extends Comparable<S>> TimeSeries<S> removePoint(TimeSeries<S> source, S name, int pointCount) {
         TimeSeries<S> result = new TimeSeries<>(name);
         double rollingSumForPeriod = 0.0;
         for (int i = 0; i < source.getItemCount(); i++) {

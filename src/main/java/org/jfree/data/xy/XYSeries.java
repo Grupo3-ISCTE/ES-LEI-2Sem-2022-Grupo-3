@@ -230,20 +230,8 @@ public class XYSeries<K extends Comparable<K>> extends Series<K>
     private void updateBoundsForRemovedItem(XYDataItem item) {
         boolean itemContributesToXBounds = false;
         boolean itemContributesToYBounds = false;
-        double x = item.getXValue();
-        if (!Double.isNaN(x)) {
-            if (x <= this.minX || x >= this.maxX) {
-                itemContributesToXBounds = true;
-            }
-        }
-        if (item.getY() != null) {
-            double y = item.getYValue();
-            if (!Double.isNaN(y)) {
-                if (y <= this.minY || y >= this.maxY) {
-                    itemContributesToYBounds = true;
-                }
-            }
-        }
+        itemContributesToXBounds = contributesXBound(item, itemContributesToXBounds);
+        itemContributesToYBounds = contributesYBound(item, itemContributesToYBounds);
         if (itemContributesToYBounds) {
             findBoundsByIteration();
         }
@@ -256,6 +244,38 @@ public class XYSeries<K extends Comparable<K>> extends Series<K>
                 findBoundsByIteration();
             }
         }
+    }
+
+    /**
+     * @param item
+     * @param itemContributesToXBounds
+     * @return
+     */
+    private boolean contributesXBound(XYDataItem item, boolean itemContributesToXBounds) {
+        double x = item.getXValue();
+        if (!Double.isNaN(x)) {
+            if (x <= this.minX || x >= this.maxX) {
+                itemContributesToXBounds = true;
+            }
+        }
+        return itemContributesToXBounds;
+    }
+
+    /**
+     * @param item
+     * @param itemContributesToYBounds
+     * @return
+     */
+    private boolean contributesYBound(XYDataItem item, boolean itemContributesToYBounds) {
+        if (item.getY() != null) {
+            double y = item.getYValue();
+            if (!Double.isNaN(y)) {
+                if (y <= this.minY || y >= this.maxY) {
+                    itemContributesToYBounds = true;
+                }
+            }
+        }
+        return itemContributesToYBounds;
     }
 
     /**
