@@ -359,6 +359,7 @@ public class DefaultStatisticalCategoryDataset<R extends Comparable<R>,
                 columnKey);
     }
 
+
     /**
      * Adds a mean and standard deviation to the table.
      *
@@ -375,12 +376,8 @@ public class DefaultStatisticalCategoryDataset<R extends Comparable<R>,
 
         double m = Double.NaN;
         double sd = Double.NaN;
-        if (mean != null) {
-            m = mean.doubleValue();
-        }
-        if (standardDeviation != null) {
-            sd = standardDeviation.doubleValue();
-        }
+        m = getSd(mean, m);
+        sd = getSd(standardDeviation, sd);
 
         // update cached range values
         int r = this.data.getColumnIndex(columnKey);
@@ -393,7 +390,6 @@ public class DefaultStatisticalCategoryDataset<R extends Comparable<R>,
                 == this.minimumRangeValueColumn) || (r
                 == this.minimumRangeValueIncStdDevRow && c
                 == this.minimumRangeValueIncStdDevColumn)) {
-
             // iterate over all data items and update mins and maxes
             updateBounds();
         }
@@ -401,40 +397,63 @@ public class DefaultStatisticalCategoryDataset<R extends Comparable<R>,
             if (!Double.isNaN(m)) {
                 if (Double.isNaN(this.maximumRangeValue)
                         || m > this.maximumRangeValue) {
-                    this.maximumRangeValue = m;
-                    this.maximumRangeValueRow = r;
-                    this.maximumRangeValueColumn = c;
+                    changeValueMax(m,r,c);
                 }
             }
 
             if (!Double.isNaN(m + sd)) {
                 if (Double.isNaN(this.maximumRangeValueIncStdDev)
                         || (m + sd) > this.maximumRangeValueIncStdDev) {
-                    this.maximumRangeValueIncStdDev = m + sd;
-                    this.maximumRangeValueIncStdDevRow = r;
-                    this.maximumRangeValueIncStdDevColumn = c;
+                    changeValueMaxIncStd(m+sd, r,c);
                 }
             }
 
             if (!Double.isNaN(m)) {
                 if (Double.isNaN(this.minimumRangeValue)
                         || m < this.minimumRangeValue) {
-                    this.minimumRangeValue = m;
-                    this.minimumRangeValueRow = r;
-                    this.minimumRangeValueColumn = c;
+                    changeValueMin(m,r,c);
                 }
             }
 
             if (!Double.isNaN(m - sd)) {
                 if (Double.isNaN(this.minimumRangeValueIncStdDev)
                         || (m - sd) < this.minimumRangeValueIncStdDev) {
-                    this.minimumRangeValueIncStdDev = m - sd;
-                    this.minimumRangeValueIncStdDevRow = r;
-                    this.minimumRangeValueIncStdDevColumn = c;
+                    changeValueMinIncStd(m-sd,r,c);
                 }
             }
         }
         fireDatasetChanged();
+    }
+
+    public void changeValueMin(double m, int r, int c) {
+        this.minimumRangeValue = m;
+        this.minimumRangeValueRow = r;
+        this.minimumRangeValueColumn = c;
+    }
+
+    public void changeValueMax(double m, int r, int c) {
+        this.maximumRangeValue = m;
+        this.maximumRangeValueRow = r;
+        this.maximumRangeValueColumn = c;
+    }
+
+    public void changeValueMaxIncStd(double m, int r, int c) {
+        this.maximumRangeValueIncStdDev = m;
+        this.maximumRangeValueIncStdDevRow = r;
+        this.maximumRangeValueIncStdDevColumn = c;
+    }
+
+    public void changeValueMinIncStd(double m, int r, int c) {
+        this.minimumRangeValueIncStdDev = m;
+        this.minimumRangeValueIncStdDevRow = r;
+        this.minimumRangeValueIncStdDevColumn = c;
+    }
+
+    private double getSd(Number standardDeviation, double sd) {
+        if(standardDeviation != null) {
+            sd = standardDeviation.doubleValue();
+        }
+        return sd;
     }
 
     /**

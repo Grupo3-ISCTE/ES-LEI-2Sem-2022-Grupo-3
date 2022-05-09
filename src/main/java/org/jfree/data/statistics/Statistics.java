@@ -121,9 +121,7 @@ public abstract class Statistics {
      *
      * @since 1.0.3
      */
-    public static double calculateMean(Collection values,
-            boolean includeNullAndNaN) {
-
+    public static double calculateMean(Collection values, boolean includeNullAndNaN) {
         Args.nullNotPermitted(values, "values");
         int count = 0;
         double total = 0.0;
@@ -425,17 +423,14 @@ public abstract class Statistics {
      */
     public static double[][] getMovingAverage(Number[] xData, Number[] yData,
             int period) {
-
         // check arguments...
         if (xData.length != yData.length) {
             throw new IllegalArgumentException("Array lengths must be equal.");
         }
-
         if (period > xData.length) {
             throw new IllegalArgumentException(
                 "Period can't be longer than dataset.");
         }
-
         double[][] result = new double[xData.length - period][2];
         for (int i = 0; i < result.length; i++) {
             result[i][0] = xData[i + period].doubleValue();
@@ -448,7 +443,6 @@ public abstract class Statistics {
             result[i][1] = sum;
         }
         return result;
-
     }
 
 }

@@ -92,7 +92,6 @@ public class CSV {
      * @throws IOException if there is an I/O problem.
      */
     public CategoryDataset readCategoryDataset(Reader in) throws IOException {
-
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         BufferedReader reader = new BufferedReader(in);
         List columnKeys = null;
@@ -109,7 +108,6 @@ public class CSV {
             lineIndex++;
         }
         return dataset;
-
     }
 
     /**

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+ * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
  * Other names may be trademarks of their respective owners.]
  *
  * -----------------
@@ -46,6 +46,7 @@ package org.jfree.data.general;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.jfree.chart.internal.ArrayUtils;
 import org.jfree.chart.internal.Args;
 
@@ -92,11 +93,9 @@ public final class DatasetUtils {
      * the dataset contains negative or {@code null} values, they are
      * ignored.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <K>     the type for the keys.
      * @return The total.
-     * 
-     * @param <K>  the type for the keys.
      */
     public static <K extends Comparable<K>> double calculatePieDatasetTotal(PieDataset<K> dataset) {
         Args.nullNotPermitted(dataset, "dataset");
@@ -120,16 +119,14 @@ public final class DatasetUtils {
      * Creates a pie dataset from a table dataset by taking all the values
      * for a single row.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
+     * @param dataset the dataset ({@code null} not permitted).
      * @param rowKey  the row key.
-     *
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return A pie dataset.
-     * 
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            PieDataset<C> createPieDatasetForRow(CategoryDataset<R, C> dataset, R rowKey) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    PieDataset<C> createPieDatasetForRow(CategoryDataset<R, C> dataset, R rowKey) {
         int row = dataset.getRowIndex(rowKey);
         return createPieDatasetForRow(dataset, row);
     }
@@ -138,16 +135,14 @@ public final class DatasetUtils {
      * Creates a pie dataset from a table dataset by taking all the values
      * for a single row.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param row  the row (zero-based index).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param row     the row (zero-based index).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return A pie dataset.
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            PieDataset<C> createPieDatasetForRow(CategoryDataset<R, C> dataset, int row) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    PieDataset<C> createPieDatasetForRow(CategoryDataset<R, C> dataset, int row) {
         DefaultPieDataset<C> result = new DefaultPieDataset<>();
         int columnCount = dataset.getColumnCount();
         for (int current = 0; current < columnCount; current++) {
@@ -161,16 +156,14 @@ public final class DatasetUtils {
      * Creates a pie dataset from a table dataset by taking all the values
      * for a single column.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param columnKey  the column key.
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset   the dataset ({@code null} not permitted).
+     * @param columnKey the column key.
+     * @param <R>       the type for the row keys.
+     * @param <C>       the type for the column keys.
      * @return A pie dataset.
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            PieDataset<R> createPieDatasetForColumn(CategoryDataset<R, C> dataset, C columnKey) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    PieDataset<R> createPieDatasetForColumn(CategoryDataset<R, C> dataset, C columnKey) {
         int column = dataset.getColumnIndex(columnKey);
         return createPieDatasetForColumn(dataset, column);
     }
@@ -179,16 +172,14 @@ public final class DatasetUtils {
      * Creates a pie dataset from a {@link CategoryDataset} by taking all the
      * values for a single column.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
+     * @param dataset the dataset ({@code null} not permitted).
      * @param column  the column (zero-based index).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return A pie dataset.
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            PieDataset<R> createPieDatasetForColumn(CategoryDataset<R, C> dataset, int column) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    PieDataset<R> createPieDatasetForColumn(CategoryDataset<R, C> dataset, int column) {
         DefaultPieDataset<R> result = new DefaultPieDataset<>();
         int rowCount = dataset.getRowCount();
         for (int i = 0; i < rowCount; i++) {
@@ -204,17 +195,15 @@ public final class DatasetUtils {
      * than the {@code percentThreshold}) into a single item with the
      * key "Other".
      *
-     * @param source  the source dataset ({@code null} not permitted).
-     * @param key  a new key for the aggregated items ({@code null} not
-     *             permitted).
-     * @param minimumPercent  the percent threshold.
-     *
-     * @param <K>  the type for the data keys.
-     * 
+     * @param source         the source dataset ({@code null} not permitted).
+     * @param key            a new key for the aggregated items ({@code null} not
+     *                       permitted).
+     * @param minimumPercent the percent threshold.
+     * @param <K>            the type for the data keys.
      * @return The pie dataset with (possibly) aggregated items.
      */
     public static <K extends Comparable<K>> PieDataset<K> createConsolidatedPieDataset(PieDataset<K> source,
-            K key, double minimumPercent) {
+                                                                                       K key, double minimumPercent) {
         return DatasetUtils.createConsolidatedPieDataset(source, key,
                 minimumPercent, 2);
     }
@@ -226,14 +215,12 @@ public final class DatasetUtils {
      * aggregated items are assigned the specified key.  Aggregation only
      * occurs if there are at least {@code minItems} items to aggregate.
      *
-     * @param source  the source dataset ({@code null} not permitted).
-     * @param key  the key to represent the aggregated items.
-     * @param minimumPercent  the percent threshold (ten percent is 0.10).
-     * @param minItems  only aggregate low values if there are at least this
-     *                  many.
-     *
-     * @param <K>  the type for the data keys.
-     * 
+     * @param source         the source dataset ({@code null} not permitted).
+     * @param key            the key to represent the aggregated items.
+     * @param minimumPercent the percent threshold (ten percent is 0.10).
+     * @param minItems       only aggregate low values if there are at least this
+     *                       many.
+     * @param <K>            the type for the data keys.
      * @return The pie dataset with (possibly) aggregated items.
      */
     public static <K extends Comparable<K>> PieDataset<K> createConsolidatedPieDataset(
@@ -265,11 +252,10 @@ public final class DatasetUtils {
             Number dataValue = source.getValue(currentKey);
             if (dataValue != null) {
                 if (otherKeys.contains(currentKey)
-                    && otherKeys.size() >= minItems) {
+                        && otherKeys.size() >= minItems) {
                     //  Do not add key to dataset
                     otherValue += dataValue.doubleValue();
-                }
-                else {
+                } else {
                     //  Add key to dataset
                     result.setValue(currentKey, dataValue);
                 }
@@ -290,10 +276,9 @@ public final class DatasetUtils {
      * Row and column keys are created by appending 0, 1, 2, ... to the
      * supplied prefixes.
      *
-     * @param rowKeyPrefix  the row key prefix.
-     * @param columnKeyPrefix  the column key prefix.
-     * @param data  the data.
-     *
+     * @param rowKeyPrefix    the row key prefix.
+     * @param columnKeyPrefix the column key prefix.
+     * @param data            the data.
      * @return The dataset.
      */
     public static CategoryDataset<String, String> createCategoryDataset(
@@ -318,16 +303,15 @@ public final class DatasetUtils {
      * Row and column keys are created by appending 0, 1, 2, ... to the
      * supplied prefixes.
      *
-     * @param rowKeyPrefix  the row key prefix.
-     * @param columnKeyPrefix  the column key prefix.
-     * @param data  the data.
-     *
+     * @param rowKeyPrefix    the row key prefix.
+     * @param columnKeyPrefix the column key prefix.
+     * @param data            the data.
      * @return The dataset.
      */
     public static CategoryDataset<String, String> createCategoryDataset(
             String rowKeyPrefix, String columnKeyPrefix, Number[][] data) {
 
-        DefaultCategoryDataset<String, String> result 
+        DefaultCategoryDataset<String, String> result
                 = new DefaultCategoryDataset<>();
         for (int r = 0; r < data.length; r++) {
             String rowKey = rowKeyPrefix + (r + 1);
@@ -347,18 +331,16 @@ public final class DatasetUtils {
      * <p>
      * Row and column keys are taken from the supplied arrays.
      *
-     * @param rowKeys  the row keys ({@code null} not permitted).
-     * @param columnKeys  the column keys ({@code null} not permitted).
-     * @param data  the data.
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param rowKeys    the row keys ({@code null} not permitted).
+     * @param columnKeys the column keys ({@code null} not permitted).
+     * @param data       the data.
+     * @param <R>        the type for the row keys.
+     * @param <C>        the type for the column keys.
      * @return The dataset.
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            CategoryDataset<R, C> createCategoryDataset(R[] rowKeys, C[] columnKeys, 
-            double[][] data) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    CategoryDataset<R, C> createCategoryDataset(R[] rowKeys, C[] columnKeys,
+                                                double[][] data) {
 
         Args.nullNotPermitted(rowKeys, "rowKeys");
         Args.nullNotPermitted(columnKeys, "columnKeys");
@@ -371,8 +353,8 @@ public final class DatasetUtils {
         }
         if (rowKeys.length != data.length) {
             throw new IllegalArgumentException(
-                "The number of row keys does not match the number of rows in "
-                + "the data array.");
+                    "The number of row keys does not match the number of rows in "
+                            + "the data array.");
         }
         int columnCount = 0;
         for (int r = 0; r < data.length; r++) {
@@ -380,8 +362,8 @@ public final class DatasetUtils {
         }
         if (columnKeys.length != columnCount) {
             throw new IllegalArgumentException(
-                "The number of column keys does not match the number of "
-                + "columns in the data array.");
+                    "The number of column keys does not match the number of "
+                            + "columns in the data array.");
         }
 
         // now do the work...
@@ -402,16 +384,14 @@ public final class DatasetUtils {
      * {@link KeyedValues} instance.
      *
      * @param rowKey  the row key ({@code null} not permitted).
-     * @param rowData  the row data ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param rowData the row data ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return A dataset.
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            CategoryDataset<R, C> createCategoryDataset(R rowKey, 
-            KeyedValues<C> rowData) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    CategoryDataset<R, C> createCategoryDataset(R rowKey,
+                                                KeyedValues<C> rowData) {
 
         Args.nullNotPermitted(rowKey, "rowKey");
         Args.nullNotPermitted(rowData, "rowData");
@@ -426,15 +406,13 @@ public final class DatasetUtils {
      * Creates an {@link XYDataset} by sampling the specified function over a
      * fixed range.
      *
-     * @param f  the function ({@code null} not permitted).
-     * @param start  the start value for the range.
-     * @param end  the end value for the range.
-     * @param samples  the number of sample points (must be &gt; 1).
-     * @param seriesKey  the key to give the resulting series ({@code null} not
-     *     permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param f         the function ({@code null} not permitted).
+     * @param start     the start value for the range.
+     * @param end       the end value for the range.
+     * @param samples   the number of sample points (must be &gt; 1).
+     * @param seriesKey the key to give the resulting series ({@code null} not
+     *                  permitted).
+     * @param <S>       the type for the series keys.
      * @return A dataset.
      */
     public static <S extends Comparable<S>> XYDataset<S> sampleFunction2D(
@@ -451,17 +429,14 @@ public final class DatasetUtils {
      * Creates an {@link XYSeries} by sampling the specified function over a
      * fixed range.
      *
-     * @param f  the function ({@code null} not permitted).
-     * @param start  the start value for the range.
-     * @param end  the end value for the range.
-     * @param samples  the number of sample points (must be &gt; 1).
-     * @param seriesKey  the key to give the resulting series
-     *                   ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param f         the function ({@code null} not permitted).
+     * @param start     the start value for the range.
+     * @param end       the end value for the range.
+     * @param samples   the number of sample points (must be &gt; 1).
+     * @param seriesKey the key to give the resulting series
+     *                  ({@code null} not permitted).
+     * @param <S>       the type for the series keys.
      * @return A series.
-     *
      * @since 1.0.13
      */
     public static <S extends Comparable<S>> XYSeries<S> sampleFunction2DToSeries(
@@ -489,8 +464,7 @@ public final class DatasetUtils {
      * Returns {@code true} if the dataset is empty (or {@code null}),
      * and {@code false} otherwise.
      *
-     * @param dataset  the dataset ({@code null} permitted).
-     *
+     * @param dataset the dataset ({@code null} permitted).
      * @return A boolean.
      */
     public static boolean isEmptyOrNull(PieDataset<?> dataset) {
@@ -517,8 +491,7 @@ public final class DatasetUtils {
      * Returns {@code true} if the dataset is empty (or {@code null}),
      * and {@code false} otherwise.
      *
-     * @param dataset  the dataset ({@code null} permitted).
-     *
+     * @param dataset the dataset ({@code null} permitted).
      * @return A boolean.
      */
     public static boolean isEmptyOrNull(CategoryDataset<?, ?> dataset) {
@@ -545,10 +518,8 @@ public final class DatasetUtils {
      * Returns {@code true} if the dataset is empty (or {@code null}),
      * and {@code false} otherwise.
      *
-     * @param dataset  the dataset ({@code null} permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} permitted).
+     * @param <S>     the type for the series keys.
      * @return A boolean.
      */
     public static <S extends Comparable<S>> boolean isEmptyOrNull(
@@ -566,10 +537,8 @@ public final class DatasetUtils {
     /**
      * Returns the range of values in the domain (x-values) of a dataset.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range of values (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range findDomainBounds(XYDataset<S> dataset) {
@@ -579,13 +548,11 @@ public final class DatasetUtils {
     /**
      * Returns the range of values in the domain (x-values) of a dataset.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  determines whether or not the x-interval is taken
-     *                         into account (only applies if the dataset is an
-     *                         {@link IntervalXYDataset}).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval determines whether or not the x-interval is taken
+     *                        into account (only applies if the dataset is an
+     *                        {@link IntervalXYDataset}).
+     * @param <S>             the type for the series keys.
      * @return The range of values (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range findDomainBounds(
@@ -596,8 +563,7 @@ public final class DatasetUtils {
         if (dataset instanceof DomainInfo) {
             DomainInfo info = (DomainInfo) dataset;
             result = info.getDomainBounds(includeInterval);
-        }
-        else {
+        } else {
             result = iterateDomainBounds(dataset, includeInterval);
         }
         return result;
@@ -608,20 +574,17 @@ public final class DatasetUtils {
      * taking into account only the visible series and including any x-interval
      * if requested.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the visible series keys ({@code null}
-     *     not permitted).
-     * @param includeInterval  include the x-interval (if any)?
-     *
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the visible series keys ({@code null}
+     *                          not permitted).
+     * @param includeInterval   include the x-interval (if any)?
+     * @param <S>               the type for the series keys.
      * @return The bounds (or {@code null} if the dataset contains no
-     *     values).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * values).
      * @since 1.0.13
      */
     public static <S extends Comparable<S>> Range findDomainBounds(
-            XYDataset<S> dataset, List<S> visibleSeriesKeys, 
+            XYDataset<S> dataset, List<S> visibleSeriesKeys,
             boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Range result;
@@ -629,8 +592,7 @@ public final class DatasetUtils {
             @SuppressWarnings("unchecked")
             XYDomainInfo<S> info = (XYDomainInfo) dataset;
             result = info.getDomainBounds(visibleSeriesKeys, includeInterval);
-        }
-        else {
+        } else {
             result = iterateToFindDomainBounds(dataset, visibleSeriesKeys,
                     includeInterval);
         }
@@ -643,10 +605,8 @@ public final class DatasetUtils {
      * {@link IntervalXYDataset}, the starting and ending x-values
      * will be used for the bounds calculation.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range iterateDomainBounds(
@@ -658,13 +618,11 @@ public final class DatasetUtils {
      * Iterates over the items in an {@link XYDataset} to find
      * the range of x-values.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines, for an
-     *          {@link IntervalXYDataset}, whether the x-interval or just the
-     *          x-value is used to determine the overall range.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval a flag that determines, for an
+     *                        {@link IntervalXYDataset}, whether the x-interval or just the
+     *                        x-value is used to determine the overall range.
+     * @param <S>             the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range iterateDomainBounds(
@@ -697,8 +655,7 @@ public final class DatasetUtils {
                     }
                 }
             }
-        }
-        else {
+        } else {
             for (int series = 0; series < seriesCount; series++) {
                 int itemCount = dataset.getItemCount(series);
                 for (int item = 0; item < itemCount; item++) {
@@ -713,8 +670,7 @@ public final class DatasetUtils {
         }
         if (minimum > maximum) {
             return null;
-        }
-        else {
+        } else {
             return new Range(minimum, maximum);
         }
     }
@@ -722,40 +678,35 @@ public final class DatasetUtils {
     /**
      * Returns the range of values in the range for the dataset.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The range (possibly {@code null}).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            findRangeBounds(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    findRangeBounds(CategoryDataset<R, C> dataset) {
         return findRangeBounds(dataset, true);
     }
 
     /**
      * Returns the range of values in the range for the dataset.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *                         y-interval is taken into account.
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval a flag that determines whether or not the
+     *                        y-interval is taken into account.
+     * @param <R>             the type for the row keys.
+     * @param <C>             the type for the column keys.
      * @return The range (possibly {@code null}).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            findRangeBounds(CategoryDataset<R, C> dataset, 
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    findRangeBounds(CategoryDataset<R, C> dataset,
                     boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Range result;
         if (dataset instanceof RangeInfo) {
             RangeInfo info = (RangeInfo) dataset;
             result = info.getRangeBounds(includeInterval);
-        }
-        else {
+        } else {
             result = iterateRangeBounds(dataset, includeInterval);
         }
         return result;
@@ -765,29 +716,25 @@ public final class DatasetUtils {
      * Finds the bounds of the y-values in the specified dataset, including
      * only those series that are listed in visibleSeriesKeys.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the keys for the visible series
-     *     ({@code null} not permitted).
-     * @param includeInterval  include the y-interval (if the dataset has a
-     *     y-interval).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the keys for the visible series
+     *                          ({@code null} not permitted).
+     * @param includeInterval   include the y-interval (if the dataset has a
+     *                          y-interval).
+     * @param <R>               the type for the row keys.
+     * @param <C>               the type for the column keys.
      * @return The data bounds.
-     *
      * @since 1.0.13
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            Range findRangeBounds(CategoryDataset<R, C> dataset, 
-            List<R> visibleSeriesKeys, boolean includeInterval) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    Range findRangeBounds(CategoryDataset<R, C> dataset,
+                          List<R> visibleSeriesKeys, boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Range result;
         if (dataset instanceof CategoryRangeInfo) {
             CategoryRangeInfo info = (CategoryRangeInfo) dataset;
             result = info.getRangeBounds(visibleSeriesKeys, includeInterval);
-        }
-        else {
+        } else {
             result = iterateToFindRangeBounds(dataset, visibleSeriesKeys,
                     includeInterval);
         }
@@ -798,10 +745,8 @@ public final class DatasetUtils {
      * Returns the range of values in the range for the dataset.  This method
      * is the partner for the {@link #findDomainBounds(XYDataset)} method.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range findRangeBounds(
@@ -814,12 +759,10 @@ public final class DatasetUtils {
      * is the partner for the {@link #findDomainBounds(XYDataset, boolean)}
      * method.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *                         y-interval is taken into account.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval a flag that determines whether or not the
+     *                        y-interval is taken into account.
+     * @param <S>             the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range findRangeBounds(
@@ -829,8 +772,7 @@ public final class DatasetUtils {
         if (dataset instanceof RangeInfo) {
             RangeInfo info = (RangeInfo) dataset;
             result = info.getRangeBounds(includeInterval);
-        }
-        else {
+        } else {
             result = iterateRangeBounds(dataset, includeInterval);
         }
         return result;
@@ -841,21 +783,18 @@ public final class DatasetUtils {
      * only those series that are listed in visibleSeriesKeys, and those items
      * whose x-values fall within the specified range.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the keys for the visible series
-     *     ({@code null} not permitted).
-     * @param xRange  the x-range ({@code null} not permitted).
-     * @param includeInterval  include the y-interval (if the dataset has a
-     *     y-interval).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the keys for the visible series
+     *                          ({@code null} not permitted).
+     * @param xRange            the x-range ({@code null} not permitted).
+     * @param includeInterval   include the y-interval (if the dataset has a
+     *                          y-interval).
+     * @param <S>               the type for the series keys.
      * @return The data bounds.
-     * 
      * @since 1.0.13
      */
     public static <S extends Comparable<S>> Range findRangeBounds(
-            XYDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange, 
+            XYDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange,
             boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Range result;
@@ -863,8 +802,7 @@ public final class DatasetUtils {
             XYRangeInfo info = (XYRangeInfo) dataset;
             result = info.getRangeBounds(visibleSeriesKeys, xRange,
                     includeInterval);
-        }
-        else {
+        } else {
             result = iterateToFindRangeBounds(dataset, visibleSeriesKeys,
                     xRange, includeInterval);
         }
@@ -875,17 +813,14 @@ public final class DatasetUtils {
      * Iterates over the data item of the category dataset to find
      * the range bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The range (possibly {@code null}).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
      * @since 1.0.10
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            iterateRangeBounds(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    iterateRangeBounds(CategoryDataset<R, C> dataset) {
         return iterateRangeBounds(dataset, true);
     }
 
@@ -893,20 +828,17 @@ public final class DatasetUtils {
      * Iterates over the data item of the category dataset to find
      * the range bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *                         y-interval is taken into account.
-     *
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval a flag that determines whether or not the
+     *                        y-interval is taken into account.
+     * @param <R>             the type for the row keys.
+     * @param <C>             the type for the column keys.
      * @return The range (possibly {@code null}).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
      * @since 1.0.10
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            iterateRangeBounds(CategoryDataset<R, C> dataset,
-            boolean includeInterval) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    iterateRangeBounds(CategoryDataset<R, C> dataset,
+                       boolean includeInterval) {
         double minimum = Double.POSITIVE_INFINITY;
         double maximum = Double.NEGATIVE_INFINITY;
         int rowCount = dataset.getRowCount();
@@ -940,8 +872,7 @@ public final class DatasetUtils {
                     }
                 }
             }
-        }
-        else {
+        } else {
             // handle the standard case (plain CategoryDataset)
             for (int row = 0; row < rowCount; row++) {
                 for (int column = 0; column < columnCount; column++) {
@@ -958,8 +889,7 @@ public final class DatasetUtils {
         }
         if (minimum == Double.POSITIVE_INFINITY) {
             return null;
-        }
-        else {
+        } else {
             return new Range(minimum, maximum);
         }
     }
@@ -968,21 +898,18 @@ public final class DatasetUtils {
      * Iterates over the data item of the category dataset to find
      * the range bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *                         y-interval is taken into account.
-     * @param visibleSeriesKeys  the visible series keys.
-     *
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param includeInterval   a flag that determines whether or not the
+     *                          y-interval is taken into account.
+     * @param visibleSeriesKeys the visible series keys.
+     * @param <R>               the type for the row keys.
+     * @param <C>               the type for the column keys.
      * @return The range (possibly {@code null}).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
      * @since 1.0.13
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            Range iterateToFindRangeBounds(CategoryDataset<R, C> dataset, 
-            List<R> visibleSeriesKeys, boolean includeInterval) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    Range iterateToFindRangeBounds(CategoryDataset<R, C> dataset,
+                                   List<R> visibleSeriesKeys, boolean includeInterval) {
 
         Args.nullNotPermitted(dataset, "dataset");
         Args.nullNotPermitted(visibleSeriesKeys, "visibleSeriesKeys");
@@ -996,132 +923,192 @@ public final class DatasetUtils {
             @SuppressWarnings("unchecked")
             BoxAndWhiskerCategoryDataset<R, C> bx
                     = (BoxAndWhiskerCategoryDataset) dataset;
-            for (R seriesKey : visibleSeriesKeys) {
-                int series = dataset.getRowIndex(seriesKey);
-                int itemCount = dataset.getColumnCount();
-                for (int item = 0; item < itemCount; item++) {
-                    Number lvalue = bx.getMinRegularValue(series, item);
-                    if (lvalue == null) {
-                        lvalue = bx.getValue(series, item);
-                    }
-                    Number uvalue = bx.getMaxRegularValue(series, item);
-                    if (uvalue == null) {
-                        uvalue = bx.getValue(series, item);
-                    }
-                    if (lvalue != null) {
-                        minimum = Math.min(minimum, lvalue.doubleValue());
-                    }
-                    if (uvalue != null) {
-                        maximum = Math.max(maximum, uvalue.doubleValue());
-                    }
-                }
-            }
-        }
-        else if (includeInterval
+            double[] min_max = boxAndWhiskerCategoryDatasetMinMax(visibleSeriesKeys, dataset, bx, minimum, maximum);
+            minimum = min_max[0];
+            maximum = min_max[1];
+        } else if (includeInterval
                 && dataset instanceof IntervalCategoryDataset) {
             // handle the special case where the dataset has y-intervals that
             // we want to measure
             @SuppressWarnings("unchecked")
             IntervalCategoryDataset<R, C> icd = (IntervalCategoryDataset) dataset;
-            Number lvalue, uvalue;
-            for (R seriesKey : visibleSeriesKeys) {
-                int series = dataset.getRowIndex(seriesKey);
-                for (int column = 0; column < columnCount; column++) {
-                    lvalue = icd.getStartValue(series, column);
-                    uvalue = icd.getEndValue(series, column);
-                    if (lvalue != null && !Double.isNaN(lvalue.doubleValue())) {
-                        minimum = Math.min(minimum, lvalue.doubleValue());
-                    }
-                    if (uvalue != null && !Double.isNaN(uvalue.doubleValue())) {
-                        maximum = Math.max(maximum, uvalue.doubleValue());
-                    }
-                }
-            }
-        }
-        else if (includeInterval
+            double[] min_max = intervalCategoryDatasetMinMax(visibleSeriesKeys, dataset, icd, columnCount, minimum, maximum);
+            minimum = min_max[0];
+            maximum = min_max[1];
+        } else if (includeInterval
                 && dataset instanceof MultiValueCategoryDataset) {
             // handle the special case where the dataset has y-intervals that
             // we want to measure
             @SuppressWarnings("unchecked")
             MultiValueCategoryDataset<R, C> mvcd
                     = (MultiValueCategoryDataset) dataset;
-            for (R seriesKey : visibleSeriesKeys) {
-                int series = dataset.getRowIndex(seriesKey);
-                for (int column = 0; column < columnCount; column++) {
-                    List<? extends Number> values = mvcd.getValues(series, column);
-                    for (Number n : values) {
-                        double v = n.doubleValue();
-                        if (!Double.isNaN(v)){
-                            minimum = Math.min(minimum, v);
-                            maximum = Math.max(maximum, v);
-                        }
-                    }
-                }
-            }
-        }
-        else if (includeInterval 
+            double[] min_max = multiValueCategoryDatasetMinMax(visibleSeriesKeys, dataset, mvcd, columnCount, minimum, maximum);
+            minimum = min_max[0];
+            maximum = min_max[1];
+        } else if (includeInterval
                 && dataset instanceof StatisticalCategoryDataset) {
             // handle the special case where the dataset has y-intervals that
             // we want to measure
             @SuppressWarnings("unchecked")
             StatisticalCategoryDataset<R, C> scd
                     = (StatisticalCategoryDataset) dataset;
-            for (R seriesKey : visibleSeriesKeys) {
-                int series = dataset.getRowIndex(seriesKey);
-                for (int column = 0; column < columnCount; column++) {
-                    Number meanN = scd.getMeanValue(series, column);
-                    if (meanN != null) {
-                        double std = 0.0;
-                        Number stdN = scd.getStdDevValue(series, column);
-                        if (stdN != null) {
-                            std = stdN.doubleValue();
-                            if (Double.isNaN(std)) {
-                                std = 0.0;
-                            }
-                        }
-                        double mean = meanN.doubleValue();
-                        if (!Double.isNaN(mean)) {
-                            minimum = Math.min(minimum, mean - std);
-                            maximum = Math.max(maximum, mean + std);
-                        }
-                    }
-                }
-            }
-        }
-        else {
+            double[] min_max = statisticalCategoryDatasetMinMax(visibleSeriesKeys, dataset, scd, columnCount, minimum, maximum);
+        } else {
             // handle the standard case (plain CategoryDataset)
-            for (R seriesKey : visibleSeriesKeys) {
-                int series = dataset.getRowIndex(seriesKey);
-                for (int column = 0; column < columnCount; column++) {
-                    Number value = dataset.getValue(series, column);
-                    if (value != null) {
-                        double v = value.doubleValue();
-                        if (!Double.isNaN(v)) {
-                            minimum = Math.min(minimum, v);
-                            maximum = Math.max(maximum, v);
-                        }
-                    }
-                }
-            }
+            double[] min_max = standartCaseDatasetMinMax(visibleSeriesKeys,dataset,columnCount,minimum,maximum);
+            minimum=min_max[0];
+            maximum=min_max[1];
         }
         if (minimum == Double.POSITIVE_INFINITY) {
             return null;
-        }
-        else {
+        } else {
             return new Range(minimum, maximum);
         }
+    }
+
+    static <R extends Comparable<R>, C extends Comparable<C>> double[] boxAndWhiskerCategoryDatasetMinMax(List<R> visibleSeriesKeys,
+                                                                                                          CategoryDataset<R, C> dataset,
+                                                                                                          BoxAndWhiskerCategoryDataset<R, C> bx,
+                                                                                                          double minimum,
+                                                                                                          double maximum) {
+        for (R seriesKey : visibleSeriesKeys) {
+            int series = dataset.getRowIndex(seriesKey);
+            int itemCount = dataset.getColumnCount();
+            for (int item = 0; item < itemCount; item++) {
+                Number lvalue = getNumber(bx.getMinRegularValue(series, item), bx.getValue(series, item));
+                Number uvalue = getNumber((BoxAndWhiskerCategoryDataset<R, C>) bx, series, item, bx.getMaxRegularValue(series, item));
+                if (lvalue != null) {
+                    minimum = Math.min(minimum, lvalue.doubleValue());
+                }
+                if (uvalue != null) {
+                    maximum = Math.max(maximum, uvalue.doubleValue());
+                }
+            }
+        }
+        return new double[]{minimum, maximum};
+    }
+
+    static <R extends Comparable<R>, C extends Comparable<C>> double[] intervalCategoryDatasetMinMax(List<R> visibleSeriesKeys,
+                                                                                                     CategoryDataset<R, C> dataset,
+                                                                                                     IntervalCategoryDataset<R, C> icd,
+                                                                                                     int columnCount,
+                                                                                                     double minimum,
+                                                                                                     double maximum) {
+        Number lvalue, uvalue;
+        for (R seriesKey : visibleSeriesKeys) {
+            int series = dataset.getRowIndex(seriesKey);
+            for (int column = 0; column < columnCount; column++) {
+                lvalue = icd.getStartValue(series, column);
+                uvalue = icd.getEndValue(series, column);
+                if (lvalue != null && !Double.isNaN(lvalue.doubleValue())) {
+                    minimum = Math.min(minimum, lvalue.doubleValue());
+                }
+                if (uvalue != null && !Double.isNaN(uvalue.doubleValue())) {
+                    maximum = Math.max(maximum, uvalue.doubleValue());
+                }
+            }
+        }
+        return new double[]{minimum, maximum};
+    }
+
+    static <R extends Comparable<R>, C extends Comparable<C>> double[] multiValueCategoryDatasetMinMax(List<R> visibleSeriesKeys,
+                                                                                                       CategoryDataset<R, C> dataset,
+                                                                                                       MultiValueCategoryDataset<R, C> mvcd,
+                                                                                                       int columnCount,
+                                                                                                       double minimum,
+                                                                                                       double maximum) {
+        for (R seriesKey : visibleSeriesKeys) {
+            int series = dataset.getRowIndex(seriesKey);
+            for (int column = 0; column < columnCount; column++) {
+                List<? extends Number> values = mvcd.getValues(series, column);
+                for (Number n : values) {
+                    double v = n.doubleValue();
+                    if (!Double.isNaN(v)) {
+                        minimum = Math.min(minimum, v);
+                        maximum = Math.max(maximum, v);
+                    }
+                }
+            }
+        }
+        return new double[]{minimum, maximum};
+    }
+
+    static <R extends Comparable<R>, C extends Comparable<C>> double[] statisticalCategoryDatasetMinMax(List<R> visibleSeriesKeys,
+                                                                                                        CategoryDataset<R, C> dataset,
+                                                                                                        StatisticalCategoryDataset<R, C> scd,
+                                                                                                        int columnCount,
+                                                                                                        double minimum,
+                                                                                                        double maximum) {
+        for (R seriesKey : visibleSeriesKeys) {
+            int series = dataset.getRowIndex(seriesKey);
+            for (int column = 0; column < columnCount; column++) {
+                Number meanN = scd.getMeanValue(series, column);
+                if (meanN != null) {
+                    double std = getStd(scd, series, column);
+                    double mean = meanN.doubleValue();
+                    if (!Double.isNaN(mean)) {
+                        minimum = Math.min(minimum, mean - std);
+                        maximum = Math.max(maximum, mean + std);
+                    }
+                }
+            }
+        }
+        return new double[]{minimum, maximum};
+    }
+
+    static <R extends Comparable<R>, C extends Comparable<C>> double[] standartCaseDatasetMinMax(List<R> visibleSeriesKeys,
+                                                                                                        CategoryDataset<R, C> dataset,
+                                                                                                        int columnCount,
+                                                                                                        double minimum,
+                                                                                                        double maximum) {
+        for (R seriesKey : visibleSeriesKeys) {
+            int series = dataset.getRowIndex(seriesKey);
+            for (int column = 0; column < columnCount; column++) {
+                Number value = dataset.getValue(series, column);
+                if (value != null) {
+                    double v = value.doubleValue();
+                    if (!Double.isNaN(v)) {
+                        minimum = Math.min(minimum, v);
+                        maximum = Math.max(maximum, v);
+                    }
+                }
+            }
+        }
+        return new double[]{minimum,maximum};
+    }
+
+    private static <R extends Comparable<R>, C extends Comparable<C>> double getStd(StatisticalCategoryDataset<R, C> scd, int series, int column) {
+        double std = 0.0;
+        Number stdN = scd.getStdDevValue(series, column);
+        if (stdN != null) {
+            std = stdN.doubleValue();
+            if (Double.isNaN(std)) {
+                std = 0.0;
+            }
+        }
+        return std;
+    }
+
+    private static Number getNumber(Number minRegularValue, Number value2) {
+        Number lvalue = minRegularValue;
+        if (lvalue == null) {
+            lvalue = value2;
+        }
+        return lvalue;
+    }
+
+    private static <R extends Comparable<R>, C extends Comparable<C>> Number getNumber(BoxAndWhiskerCategoryDataset<R, C> bx, int series, int item, Number maxRegularValue) {
+        Number uvalue = getNumber(maxRegularValue, bx.getValue(series, item));
+        return uvalue;
     }
 
     /**
      * Iterates over the data item of the xy dataset to find
      * the range bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range (possibly {@code null}).
-     *
      * @since 1.0.10
      */
     public static <S extends Comparable<S>> Range iterateRangeBounds(
@@ -1133,15 +1120,12 @@ public final class DatasetUtils {
      * Iterates over the data items of the xy dataset to find
      * the range bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines, for an
-     *          {@link IntervalXYDataset}, whether the y-interval or just the
-     *          y-value is used to determine the overall range.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval a flag that determines, for an
+     *                        {@link IntervalXYDataset}, whether the y-interval or just the
+     *                        y-value is used to determine the overall range.
+     * @param <S>             the type for the series keys.
      * @return The range (possibly {@code null}).
-     *
      * @since 1.0.10
      */
     public static <S extends Comparable<S>> Range iterateRangeBounds(
@@ -1175,8 +1159,7 @@ public final class DatasetUtils {
                     }
                 }
             }
-        }
-        else if (includeInterval && dataset instanceof OHLCDataset) {
+        } else if (includeInterval && dataset instanceof OHLCDataset) {
             // handle special case of OHLCDataset
             OHLCDataset ohlc = (OHLCDataset) dataset;
             for (int series = 0; series < seriesCount; series++) {
@@ -1192,8 +1175,7 @@ public final class DatasetUtils {
                     }
                 }
             }
-        }
-        else {
+        } else {
             // standard case - plain XYDataset
             for (int series = 0; series < seriesCount; series++) {
                 int itemCount = dataset.getItemCount(series);
@@ -1208,8 +1190,7 @@ public final class DatasetUtils {
         }
         if (minimum == Double.POSITIVE_INFINITY) {
             return null;
-        }
-        else {
+        } else {
             return new Range(minimum, maximum);
         }
     }
@@ -1219,10 +1200,8 @@ public final class DatasetUtils {
      * method is the partner for the {@link #findRangeBounds(XYDataset)}
      * and {@link #findDomainBounds(XYDataset)} methods.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range findZBounds(
@@ -1236,12 +1215,10 @@ public final class DatasetUtils {
      * {@link #findRangeBounds(XYDataset, boolean)} and
      * {@link #findDomainBounds(XYDataset, boolean)} methods.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *                         z-interval is taken into account.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval a flag that determines whether or not the
+     *                        z-interval is taken into account.
+     * @param <S>             the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range findZBounds(
@@ -1256,23 +1233,21 @@ public final class DatasetUtils {
      * only those series that are listed in visibleSeriesKeys, and those items
      * whose x-values fall within the specified range.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the keys for the visible series
-     *     ({@code null} not permitted).
-     * @param xRange  the x-range ({@code null} not permitted).
-     * @param includeInterval  include the z-interval (if the dataset has a
-     *     z-interval).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the keys for the visible series
+     *                          ({@code null} not permitted).
+     * @param xRange            the x-range ({@code null} not permitted).
+     * @param includeInterval   include the z-interval (if the dataset has a
+     *                          z-interval).
+     * @param <S>               the type for the series keys.
      * @return The data bounds.
      */
     public static <S extends Comparable<S>> Range findZBounds(
-            XYZDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange, 
+            XYZDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange,
             boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Range result = iterateToFindZBounds(dataset, visibleSeriesKeys,
-                    xRange, includeInterval);
+                xRange, includeInterval);
         return result;
     }
 
@@ -1280,10 +1255,8 @@ public final class DatasetUtils {
      * Iterates over the data item of the xyz dataset to find
      * the z-dimension bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range iterateZBounds(
@@ -1295,12 +1268,10 @@ public final class DatasetUtils {
      * Iterates over the data items of the xyz dataset to find
      * the z-dimension bounds.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param includeInterval  include the z-interval (if the dataset has a
-     *     z-interval.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset         the dataset ({@code null} not permitted).
+     * @param includeInterval include the z-interval (if the dataset has a
+     *                        z-interval.
+     * @param <S>             the type for the series keys.
      * @return The range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range iterateZBounds(
@@ -1321,19 +1292,19 @@ public final class DatasetUtils {
                         minimum = Math.min(minimum, value);
                         maximum = Math.max(maximum, value);
                     }
-                    
+
                     Number start = intervalDataset.getStartZValue(series, item);
                     if (start != null && !Double.isNaN(start.doubleValue())) {
                         minimum = Math.min(minimum, start.doubleValue());
-                        maximum = Math.max(maximum, start.doubleValue());                        
+                        maximum = Math.max(maximum, start.doubleValue());
                     }
                     Number end = intervalDataset.getEndZValue(series, item);
                     if (end != null && !Double.isNaN(end.doubleValue())) {
                         minimum = Math.min(minimum, end.doubleValue());
-                        maximum = Math.max(maximum, end.doubleValue());                        
+                        maximum = Math.max(maximum, end.doubleValue());
                     }
                 }
-            }            
+            }
         } else {
             for (int series = 0; series < seriesCount; series++) {
                 int itemCount = dataset.getItemCount(series);
@@ -1357,22 +1328,19 @@ public final class DatasetUtils {
     /**
      * Returns the range of x-values in the specified dataset for the
      * data items belonging to the visible series.
-     * 
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the visible series keys ({@code null} not
-     *     permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *     y-interval for the dataset is included (this only applies if the
-     *     dataset is an instance of IntervalXYDataset).
-     * 
-     * @param <S>  the type for the series keys.
-     * 
+     *
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the visible series keys ({@code null} not
+     *                          permitted).
+     * @param includeInterval   a flag that determines whether or not the
+     *                          y-interval for the dataset is included (this only applies if the
+     *                          dataset is an instance of IntervalXYDataset).
+     * @param <S>               the type for the series keys.
      * @return The x-range (possibly {@code null}).
-     * 
      * @since 1.0.13
      */
     public static <S extends Comparable<S>> Range iterateToFindDomainBounds(
-            XYDataset<S> dataset, List<S> visibleSeriesKeys, 
+            XYDataset<S> dataset, List<S> visibleSeriesKeys,
             boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Args.nullNotPermitted(visibleSeriesKeys, "visibleSeriesKeys");
@@ -1430,22 +1398,19 @@ public final class DatasetUtils {
      * data items belonging to the visible series and with x-values in the
      * given range.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the visible series keys ({@code null} not
-     *     permitted).
-     * @param xRange  the x-range ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *     y-interval for the dataset is included (this only applies if the
-     *     dataset is an instance of IntervalXYDataset).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the visible series keys ({@code null} not
+     *                          permitted).
+     * @param xRange            the x-range ({@code null} not permitted).
+     * @param includeInterval   a flag that determines whether or not the
+     *                          y-interval for the dataset is included (this only applies if the
+     *                          dataset is an instance of IntervalXYDataset).
+     * @param <S>               the type for the series keys.
      * @return The y-range (possibly {@code null}).
-     *
      * @since 1.0.13
      */
     public static <S extends Comparable<S>> Range iterateToFindRangeBounds(
-            XYDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange, 
+            XYDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange,
             boolean includeInterval) {
 
         Args.nullNotPermitted(dataset, "dataset");
@@ -1476,8 +1441,7 @@ public final class DatasetUtils {
                     }
                 }
             }
-        }
-        else if (includeInterval && dataset instanceof BoxAndWhiskerXYDataset) {
+        } else if (includeInterval && dataset instanceof BoxAndWhiskerXYDataset) {
             // handle special case of BoxAndWhiskerXYDataset
             @SuppressWarnings("unchecked")
             BoxAndWhiskerXYDataset<S> bx = (BoxAndWhiskerXYDataset) dataset;
@@ -1498,8 +1462,7 @@ public final class DatasetUtils {
                     }
                 }
             }
-        }
-        else if (includeInterval && dataset instanceof IntervalXYDataset) {
+        } else if (includeInterval && dataset instanceof IntervalXYDataset) {
             // handle special case of IntervalXYDataset
             @SuppressWarnings("unchecked")
             IntervalXYDataset<S> ixyd = (IntervalXYDataset) dataset;
@@ -1554,28 +1517,26 @@ public final class DatasetUtils {
      * data items belonging to the visible series and with x-values in the
      * given range.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param visibleSeriesKeys  the visible series keys ({@code null} not
-     *     permitted).
-     * @param xRange  the x-range ({@code null} not permitted).
-     * @param includeInterval  a flag that determines whether or not the
-     *     z-interval for the dataset is included (this only applies if the
-     *     dataset has an interval, which is currently not supported).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset           the dataset ({@code null} not permitted).
+     * @param visibleSeriesKeys the visible series keys ({@code null} not
+     *                          permitted).
+     * @param xRange            the x-range ({@code null} not permitted).
+     * @param includeInterval   a flag that determines whether or not the
+     *                          z-interval for the dataset is included (this only applies if the
+     *                          dataset has an interval, which is currently not supported).
+     * @param <S>               the type for the series keys.
      * @return The y-range (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Range iterateToFindZBounds(
-            XYZDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange, 
+            XYZDataset<S> dataset, List<S> visibleSeriesKeys, Range xRange,
             boolean includeInterval) {
         Args.nullNotPermitted(dataset, "dataset");
         Args.nullNotPermitted(visibleSeriesKeys, "visibleSeriesKeys");
         Args.nullNotPermitted(xRange, "xRange");
-    
+
         double minimum = Double.POSITIVE_INFINITY;
         double maximum = Double.NEGATIVE_INFINITY;
-    
+
         for (S seriesKey : visibleSeriesKeys) {
             int series = dataset.indexOf(seriesKey);
             int itemCount = dataset.getItemCount(series);
@@ -1607,10 +1568,8 @@ public final class DatasetUtils {
      * Returns {@code null} if all the data values in the dataset are
      * {@code null}.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The minimum value (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Number findMinimumDomainValue(
@@ -1621,8 +1580,7 @@ public final class DatasetUtils {
         if (dataset instanceof DomainInfo) {
             DomainInfo info = (DomainInfo) dataset;
             return info.getDomainLowerBound(true);
-        }
-        else {
+        } else {
             double minimum = Double.POSITIVE_INFINITY;
             int seriesCount = dataset.getSeriesCount();
             for (int series = 0; series < seriesCount; series++) {
@@ -1633,10 +1591,9 @@ public final class DatasetUtils {
                     if (dataset instanceof IntervalXYDataset) {
                         @SuppressWarnings("unchecked")
                         IntervalXYDataset<S> intervalXYData
-                            = (IntervalXYDataset) dataset;
+                                = (IntervalXYDataset) dataset;
                         value = intervalXYData.getStartXValue(series, item);
-                    }
-                    else {
+                    } else {
                         value = dataset.getXValue(series, item);
                     }
                     if (!Double.isNaN(value)) {
@@ -1647,8 +1604,7 @@ public final class DatasetUtils {
             }
             if (minimum == Double.POSITIVE_INFINITY) {
                 result = null;
-            }
-            else {
+            } else {
                 result = minimum;
             }
         }
@@ -1664,10 +1620,8 @@ public final class DatasetUtils {
      * {@code null} if all the data values in the dataset are
      * {@code null}.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The maximum value (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Number findMaximumDomainValue(
@@ -1692,10 +1646,9 @@ public final class DatasetUtils {
                     if (dataset instanceof IntervalXYDataset) {
                         @SuppressWarnings("unchecked")
                         IntervalXYDataset<S> intervalXYData
-                            = (IntervalXYDataset) dataset;
+                                = (IntervalXYDataset) dataset;
                         value = intervalXYData.getEndXValue(series, item);
-                    }
-                    else {
+                    } else {
                         value = dataset.getXValue(series, item);
                     }
                     if (!Double.isNaN(value)) {
@@ -1705,8 +1658,7 @@ public final class DatasetUtils {
             }
             if (maximum == Double.NEGATIVE_INFINITY) {
                 result = null;
-            }
-            else {
+            } else {
                 result = maximum;
             }
         }
@@ -1721,15 +1673,13 @@ public final class DatasetUtils {
      * {@code null} if all the data values in the dataset are
      * {@code null}.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The minimum value (possibly {@code null}).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Number 
-            findMinimumRangeValue(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Number
+    findMinimumRangeValue(CategoryDataset<R, C> dataset) {
         Args.nullNotPermitted(dataset, "dataset");
         if (dataset instanceof RangeInfo) {
             RangeInfo info = (RangeInfo) dataset;
@@ -1741,30 +1691,34 @@ public final class DatasetUtils {
             double minimum = Double.POSITIVE_INFINITY;
             int seriesCount = dataset.getRowCount();
             int itemCount = dataset.getColumnCount();
-            for (int series = 0; series < seriesCount; series++) {
-                for (int item = 0; item < itemCount; item++) {
-                    Number value;
-                    if (dataset instanceof IntervalCategoryDataset) {
-                        @SuppressWarnings("unchecked")
-                        IntervalCategoryDataset<R, C> icd
-                                = (IntervalCategoryDataset) dataset;
-                        value = icd.getStartValue(series, item);
-                    }
-                    else {
-                        value = dataset.getValue(series, item);
-                    }
-                    if (value != null) {
-                        minimum = Math.min(minimum, value.doubleValue());
-                    }
-                }
-            }
+            minimum = getMinimum(dataset, minimum, seriesCount, itemCount);
             if (minimum == Double.POSITIVE_INFINITY) {
                 return null;
-            }
-            else {
+            } else {
                 return minimum;
             }
         }
+    }
+
+    private static <C extends Comparable<C>, R extends Comparable<R>> double getMinimum(
+            CategoryDataset<R, C> dataset, double minimum, int seriesCount, int itemCount) {
+        for (int series = 0; series < seriesCount; series++) {
+            for (int item = 0; item < itemCount; item++) {
+                Number value;
+                if (dataset instanceof IntervalCategoryDataset) {
+                    @SuppressWarnings("unchecked")
+                    IntervalCategoryDataset<R, C> icd
+                            = (IntervalCategoryDataset) dataset;
+                    value = icd.getStartValue(series, item);
+                } else {
+                    value = dataset.getValue(series, item);
+                }
+                if (value != null) {
+                    minimum = Math.min(minimum, value.doubleValue());
+                }
+            }
+        }
+        return minimum;
     }
 
     /**
@@ -1775,10 +1729,8 @@ public final class DatasetUtils {
      * {@code null} if all the data values in the dataset are
      * {@code null}.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The minimum value (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Number findMinimumRangeValue(
@@ -1795,37 +1747,40 @@ public final class DatasetUtils {
         else {
             double minimum = Double.POSITIVE_INFINITY;
             int seriesCount = dataset.getSeriesCount();
-            for (int series = 0; series < seriesCount; series++) {
-                int itemCount = dataset.getItemCount(series);
-                for (int item = 0; item < itemCount; item++) {
-
-                    double value;
-                    if (dataset instanceof IntervalXYDataset) {
-                        @SuppressWarnings("unchecked")
-                        IntervalXYDataset<S> intervalXYData
-                                = (IntervalXYDataset) dataset;
-                        value = intervalXYData.getStartYValue(series, item);
-                    }
-                    else if (dataset instanceof OHLCDataset) {
-                        OHLCDataset highLowData = (OHLCDataset) dataset;
-                        value = highLowData.getLowValue(series, item);
-                    }
-                    else {
-                        value = dataset.getYValue(series, item);
-                    }
-                    if (!Double.isNaN(value)) {
-                        minimum = Math.min(minimum, value);
-                    }
-
-                }
-            }
+            minimum = getMinimum(dataset, minimum, seriesCount);
             if (minimum == Double.POSITIVE_INFINITY) {
                 return null;
-            }
-            else {
+            } else {
                 return minimum;
             }
         }
+    }
+
+    private static <S extends Comparable<S>> double getMinimum(XYDataset<S> dataset, double minimum,
+                                                               int seriesCount) {
+        for (int series = 0; series < seriesCount; series++) {
+            int itemCount = dataset.getItemCount(series);
+            for (int item = 0; item < itemCount; item++) {
+
+                double value;
+                if (dataset instanceof IntervalXYDataset) {
+                    @SuppressWarnings("unchecked")
+                    IntervalXYDataset<S> intervalXYData
+                            = (IntervalXYDataset) dataset;
+                    value = intervalXYData.getStartYValue(series, item);
+                } else if (dataset instanceof OHLCDataset) {
+                    OHLCDataset highLowData = (OHLCDataset) dataset;
+                    value = highLowData.getLowValue(series, item);
+                } else {
+                    value = dataset.getYValue(series, item);
+                }
+                if (!Double.isNaN(value)) {
+                    minimum = Math.min(minimum, value);
+                }
+
+            }
+        }
+        return minimum;
     }
 
     /**
@@ -1835,15 +1790,13 @@ public final class DatasetUtils {
      * Otherwise, it involves iterating over the entire data-set.  Returns
      * {@code null} if all the data values are {@code null}.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The maximum value (possibly {@code null}).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> 
-            Number findMaximumRangeValue(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>>
+    Number findMaximumRangeValue(CategoryDataset<R, C> dataset) {
 
         Args.nullNotPermitted(dataset, "dataset");
 
@@ -1865,10 +1818,9 @@ public final class DatasetUtils {
                     if (dataset instanceof IntervalCategoryDataset) {
                         @SuppressWarnings("unchecked")
                         IntervalCategoryDataset<R, C> icd
-                            = (IntervalCategoryDataset) dataset;
+                                = (IntervalCategoryDataset) dataset;
                         value = icd.getEndValue(series, item);
-                    }
-                    else {
+                    } else {
                         value = dataset.getValue(series, item);
                     }
                     if (value != null) {
@@ -1878,8 +1830,7 @@ public final class DatasetUtils {
             }
             if (maximum == Double.NEGATIVE_INFINITY) {
                 return null;
-            }
-            else {
+            } else {
                 return maximum;
             }
 
@@ -1894,10 +1845,8 @@ public final class DatasetUtils {
      * Otherwise, it involves iterating over the entire data-set.  Returns
      * {@code null} if all the data values are {@code null}.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The maximum value (possibly {@code null}).
      */
     public static <S extends Comparable<S>> Number findMaximumRangeValue(
@@ -1912,7 +1861,7 @@ public final class DatasetUtils {
         }
 
         // hasn't implemented RangeInfo, so we'll have to iterate...
-        else  {
+        else {
 
             double maximum = Double.NEGATIVE_INFINITY;
             int seriesCount = dataset.getSeriesCount();
@@ -1925,12 +1874,10 @@ public final class DatasetUtils {
                         IntervalXYDataset<S> intervalXYData
                                 = (IntervalXYDataset) dataset;
                         value = intervalXYData.getEndYValue(series, item);
-                    }
-                    else if (dataset instanceof OHLCDataset) {
+                    } else if (dataset instanceof OHLCDataset) {
                         OHLCDataset highLowData = (OHLCDataset) dataset;
                         value = highLowData.getHighValue(series, item);
-                    }
-                    else {
+                    } else {
                         value = dataset.getYValue(series, item);
                     }
                     if (!Double.isNaN(value)) {
@@ -1940,8 +1887,7 @@ public final class DatasetUtils {
             }
             if (maximum == Double.NEGATIVE_INFINITY) {
                 return null;
-            }
-            else {
+            } else {
                 return maximum;
             }
         }
@@ -1951,15 +1897,13 @@ public final class DatasetUtils {
      * Returns the minimum and maximum values for the dataset's range
      * (y-values), assuming that the series in one category are stacked.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The range ({@code null} if the dataset contains no values).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            findStackedRangeBounds(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    findStackedRangeBounds(CategoryDataset<R, C> dataset) {
         return findStackedRangeBounds(dataset, 0.0);
     }
 
@@ -1967,16 +1911,14 @@ public final class DatasetUtils {
      * Returns the minimum and maximum values for the dataset's range
      * (y-values), assuming that the series in one category are stacked.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param base  the base value for the bars.
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param base    the base value for the bars.
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The range ({@code null} if the dataset contains no values).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            findStackedRangeBounds(CategoryDataset<R, C> dataset, double base) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    findStackedRangeBounds(CategoryDataset<R, C> dataset, double base) {
         Args.nullNotPermitted(dataset, "dataset");
         Range result = null;
         double minimum = Double.POSITIVE_INFINITY;
@@ -2013,19 +1955,17 @@ public final class DatasetUtils {
      * Returns the minimum and maximum values for the dataset's range
      * (y-values), assuming that the series in one category are stacked.
      *
-     * @param dataset  the dataset.
-     * @param map  a structure that maps series to groups.
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * @param <G>  the type for the group keys.
-     * 
+     * @param dataset the dataset.
+     * @param map     a structure that maps series to groups.
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
+     * @param <G>     the type for the group keys.
      * @return The value range ({@code null} if the dataset contains no
-     *         values).
+     * values).
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>, G extends Comparable<G>> 
-            Range findStackedRangeBounds(CategoryDataset<R, C> dataset, 
-            KeyToGroupMap<R, G> map) {
+    public static <R extends Comparable<R>, C extends Comparable<C>, G extends Comparable<G>>
+    Range findStackedRangeBounds(CategoryDataset<R, C> dataset,
+                                 KeyToGroupMap<R, G> map) {
         Args.nullNotPermitted(dataset, "dataset");
         boolean hasValidData = false;
         Range result = null;
@@ -2042,6 +1982,20 @@ public final class DatasetUtils {
         double[] maximum = new double[groupCount];
 
         int categoryCount = dataset.getColumnCount();
+        hasValidData = hasValidData(dataset, hasValidData, groupIndex, groupCount, minimum, maximum,
+                categoryCount);
+        if (hasValidData) {
+            for (int j = 0; j < groupCount; j++) {
+                result = Range.combine(result, new Range(minimum[j],
+                        maximum[j]));
+            }
+        }
+        return result;
+    }
+
+    private static <R extends Comparable<R>, C extends Comparable<C>> boolean hasValidData(
+            CategoryDataset<R, C> dataset, boolean hasValidData, int[] groupIndex, int groupCount, double[] minimum,
+            double[] maximum, int categoryCount) {
         for (int item = 0; item < categoryCount; item++) {
             double[] positive = new double[groupCount];
             double[] negative = new double[groupCount];
@@ -2053,12 +2007,12 @@ public final class DatasetUtils {
                     double value = number.doubleValue();
                     if (value > 0.0) {
                         positive[groupIndex[series]]
-                                 = positive[groupIndex[series]] + value;
+                                = positive[groupIndex[series]] + value;
                     }
                     if (value < 0.0) {
                         negative[groupIndex[series]]
-                                 = negative[groupIndex[series]] + value;
-                                 // '+', remember value is negative
+                                = negative[groupIndex[series]] + value;
+                        // '+', remember value is negative
                     }
                 }
             }
@@ -2067,30 +2021,21 @@ public final class DatasetUtils {
                 maximum[g] = Math.max(maximum[g], positive[g]);
             }
         }
-        if (hasValidData) {
-            for (int j = 0; j < groupCount; j++) {
-                result = Range.combine(result, new Range(minimum[j],
-                        maximum[j]));
-            }
-        }
-        return result;
+        return hasValidData;
     }
 
     /**
      * Returns the minimum value in the dataset range, assuming that values in
      * each category are "stacked".
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The minimum value.
-     *
      * @see #findMaximumStackedRangeValue(CategoryDataset)
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Number 
-            findMinimumStackedRangeValue(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Number
+    findMinimumStackedRangeValue(CategoryDataset<R, C> dataset) {
         Args.nullNotPermitted(dataset, "dataset");
         Number result = null;
         boolean hasValidData = false;
@@ -2122,17 +2067,14 @@ public final class DatasetUtils {
      * Returns the maximum value in the dataset range, assuming that values in
      * each category are "stacked".
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The maximum value (possibly {@code null}).
-     *
      * @see #findMinimumStackedRangeValue(CategoryDataset)
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Number 
-            findMaximumStackedRangeValue(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Number
+    findMaximumStackedRangeValue(CategoryDataset<R, C> dataset) {
         Args.nullNotPermitted(dataset, "dataset");
         Number result = null;
         boolean hasValidData = false;
@@ -2163,10 +2105,8 @@ public final class DatasetUtils {
      * Returns the minimum and maximum values for the dataset's range,
      * assuming that the series are stacked.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <S>     the type for the series keys.
      * @return The range ([0.0, 0.0] if the dataset contains no values).
      */
     public static <S extends Comparable<S>> Range findStackedRangeBounds(
@@ -2178,11 +2118,9 @@ public final class DatasetUtils {
      * Returns the minimum and maximum values for the dataset's range,
      * assuming that the series are stacked, using the specified base value.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     * @param base  the base value.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param base    the base value.
+     * @param <S>     the type for the series keys.
      * @return The range ({@code null} if the dataset contains no values).
      */
     public static <S extends Comparable<S>> Range findStackedRangeBounds(
@@ -2199,8 +2137,7 @@ public final class DatasetUtils {
                 if (!Double.isNaN(y)) {
                     if (y > 0.0) {
                         positive += y;
-                    }
-                    else {
+                    } else {
                         negative += y;
                     }
                 }
@@ -2214,8 +2151,7 @@ public final class DatasetUtils {
         }
         if (minimum <= maximum) {
             return new Range(minimum, maximum);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -2224,13 +2160,10 @@ public final class DatasetUtils {
      * Calculates the total for the y-values in all series for a given item
      * index.
      *
-     * @param dataset  the dataset.
-     * @param item  the item index.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param dataset the dataset.
+     * @param item    the item index.
+     * @param <S>     the type for the series keys.
      * @return The total.
-     *
      * @since 1.0.5
      */
     public static <S extends Comparable<S>> double calculateStackTotal(
@@ -2250,20 +2183,17 @@ public final class DatasetUtils {
      * Calculates the range of values for a dataset where each item is the
      * running total of the items for the current series.
      *
-     * @param dataset  the dataset ({@code null} not permitted).
-     *
-     * @param <R>  the type for the row keys.
-     * @param <C>  the type for the column keys.
-     * 
+     * @param dataset the dataset ({@code null} not permitted).
+     * @param <R>     the type for the row keys.
+     * @param <C>     the type for the column keys.
      * @return The range.
-     *
      * @see #findRangeBounds(CategoryDataset)
      */
-    public static <R extends Comparable<R>, C extends Comparable<C>> Range 
-            findCumulativeRangeBounds(CategoryDataset<R, C> dataset) {
+    public static <R extends Comparable<R>, C extends Comparable<C>> Range
+    findCumulativeRangeBounds(CategoryDataset<R, C> dataset) {
         Args.nullNotPermitted(dataset, "dataset");
         boolean allItemsNull = true; // we'll set this to false if there is at
-                                     // least one non-null data item...
+        // least one non-null data item...
         double minimum = 0.0;
         double maximum = 0.0;
         for (int row = 0; row < dataset.getRowCount(); row++) {
@@ -2284,8 +2214,7 @@ public final class DatasetUtils {
         }
         if (!allItemsNull) {
             return new Range(minimum, maximum);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -2294,15 +2223,12 @@ public final class DatasetUtils {
      * Returns the interpolated value of y that corresponds to the specified
      * x-value in the given series.  If the x-value falls outside the range of
      * x-values for the dataset, this method returns {@code Double.NaN}.
-     * 
-     * @param dataset  the dataset ({@code null} not permitted).
+     *
+     * @param dataset the dataset ({@code null} not permitted).
      * @param series  the series index.
-     * @param x  the x-value.
-     * 
-     * @param <S>  the type for the series keys.
-     * 
+     * @param x       the x-value.
+     * @param <S>     the type for the series keys.
      * @return The y value.
-     * 
      * @since 1.0.16
      */
     public static <S extends Comparable<S>> double findYValue(
@@ -2321,42 +2247,39 @@ public final class DatasetUtils {
         double y1 = dataset.getYValue(series, indices[1]);
         return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
     }
-    
+
     /**
-     * Finds the indices of the the items in the dataset that span the 
+     * Finds the indices of the the items in the dataset that span the
      * specified x-value.  There are three cases for the return value:
      * <ul>
-     * <li>there is an exact match for the x-value at index i 
+     * <li>there is an exact match for the x-value at index i
      * (returns {@code int[] {i, i}});</li>
-     * <li>the x-value falls between two (adjacent) items at index i and i+1 
+     * <li>the x-value falls between two (adjacent) items at index i and i+1
      * (returns {@code int[] {i, i+1}});</li>
-     * <li>the x-value falls outside the domain bounds, in which case the 
+     * <li>the x-value falls outside the domain bounds, in which case the
      *    method returns {@code int[] {-1, -1}}.</li>
      * </ul>
-     * @param dataset  the dataset ({@code null} not permitted).
+     *
+     * @param dataset the dataset ({@code null} not permitted).
      * @param series  the series index.
-     * @param x  the x-value.
-     *
-     * @param <S>  the type for the series keys.
-     * 
+     * @param x       the x-value.
+     * @param <S>     the type for the series keys.
      * @return The indices of the two items that span the x-value.
-     *
+     * @see #findYValue(org.jfree.data.xy.XYDataset, int, double)
      * @since 1.0.16
-     * 
-     * @see #findYValue(org.jfree.data.xy.XYDataset, int, double) 
      */
     public static <S extends Comparable<S>> int[] findItemIndicesForX(
             XYDataset<S> dataset, int series, double x) {
         Args.nullNotPermitted(dataset, "dataset");
         int itemCount = dataset.getItemCount(series);
         if (itemCount == 0) {
-            return new int[] {-1, -1};
+            return new int[]{-1, -1};
         }
         if (itemCount == 1) {
             if (x == dataset.getXValue(series, 0)) {
-                return new int[] {0, 0};
+                return new int[]{0, 0};
             } else {
-                return new int[] {-1, -1};
+                return new int[]{-1, -1};
             }
         }
         if (dataset.getDomainOrder() == DomainOrder.ASCENDING) {
@@ -2364,79 +2287,75 @@ public final class DatasetUtils {
             int high = itemCount - 1;
             double lowValue = dataset.getXValue(series, low);
             if (lowValue > x) {
-                return new int[] {-1, -1};
+                return new int[]{-1, -1};
             }
             if (lowValue == x) {
-                return new int[] {low, low};
+                return new int[]{low, low};
             }
             double highValue = dataset.getXValue(series, high);
             if (highValue < x) {
-                return new int[] {-1, -1};
+                return new int[]{-1, -1};
             }
             if (highValue == x) {
-                return new int[] {high, high};
+                return new int[]{high, high};
             }
             int mid = (low + high) / 2;
             while (high - low > 1) {
                 double midV = dataset.getXValue(series, mid);
                 if (x == midV) {
-                    return new int[] {mid, mid};
+                    return new int[]{mid, mid};
                 }
                 if (midV < x) {
                     low = mid;
-                }
-                else {
+                } else {
                     high = mid;
                 }
                 mid = (low + high) / 2;
             }
-            return new int[] {low, high};
-        }
-        else if (dataset.getDomainOrder() == DomainOrder.DESCENDING) {
+            return new int[]{low, high};
+        } else if (dataset.getDomainOrder() == DomainOrder.DESCENDING) {
             int high = 0;
             int low = itemCount - 1;
             double lowValue = dataset.getXValue(series, low);
             if (lowValue > x) {
-                return new int[] {-1, -1};
+                return new int[]{-1, -1};
             }
             double highValue = dataset.getXValue(series, high);
             if (highValue < x) {
-                return new int[] {-1, -1};
+                return new int[]{-1, -1};
             }
             int mid = (low + high) / 2;
             while (high - low > 1) {
                 double midV = dataset.getXValue(series, mid);
                 if (x == midV) {
-                    return new int[] {mid, mid};
+                    return new int[]{mid, mid};
                 }
                 if (midV < x) {
                     low = mid;
-                }
-                else {
+                } else {
                     high = mid;
                 }
                 mid = (low + high) / 2;
             }
-            return new int[] {low, high};
-        }
-        else {
+            return new int[]{low, high};
+        } else {
             // we don't know anything about the ordering of the x-values,
             // so we iterate until we find the first crossing of x (if any)
             // we know there are at least 2 items in the series at this point
             double prev = dataset.getXValue(series, 0);
             if (x == prev) {
-                return new int[] {0, 0}; // exact match on first item
+                return new int[]{0, 0}; // exact match on first item
             }
             for (int i = 1; i < itemCount; i++) {
                 double next = dataset.getXValue(series, i);
                 if (x == next) {
-                    return new int[] {i, i}; // exact match
+                    return new int[]{i, i}; // exact match
                 }
                 if ((x > prev && x < next) || (x < prev && x > next)) {
-                    return new int[] {i - 1, i}; // spanning match
+                    return new int[]{i - 1, i}; // spanning match
                 }
             }
-            return new int[] {-1, -1}; // no crossing of x
+            return new int[]{-1, -1}; // no crossing of x
         }
     }
 

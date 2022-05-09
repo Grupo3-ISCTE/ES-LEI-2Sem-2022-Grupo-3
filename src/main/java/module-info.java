@@ -3,6 +3,7 @@
  */
 module org.jfree.chart {
     requires java.desktop;
+//    requires java.desktop;
     exports org.jfree.chart;
     exports org.jfree.chart.annotations;
     exports org.jfree.chart.api;

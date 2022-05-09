@@ -134,7 +134,6 @@ public class DefaultBoxAndWhiskerCategoryDataset<R extends Comparable<R>,
             updateBounds();
         }
         else {
-
             double minval = Double.NaN;
             if (item.getMinOutlier() != null) {
                 minval = item.getMinOutlier().doubleValue();
@@ -143,32 +142,35 @@ public class DefaultBoxAndWhiskerCategoryDataset<R extends Comparable<R>,
             if (item.getMaxOutlier() != null) {
                 maxval = item.getMaxOutlier().doubleValue();
             }
-
-            if (Double.isNaN(this.maximumRangeValue)) {
-                this.maximumRangeValue = maxval;
-                this.maximumRangeValueRow = r;
-                this.maximumRangeValueColumn = c;
-            }
-            else if (maxval > this.maximumRangeValue) {
-                this.maximumRangeValue = maxval;
-                this.maximumRangeValueRow = r;
-                this.maximumRangeValueColumn = c;
-            }
-
-            if (Double.isNaN(this.minimumRangeValue)) {
-                this.minimumRangeValue = minval;
-                this.minimumRangeValueRow = r;
-                this.minimumRangeValueColumn = c;
-            }
-            else if (minval < this.minimumRangeValue) {
-                this.minimumRangeValue = minval;
-                this.minimumRangeValueRow = r;
-                this.minimumRangeValueColumn = c;
-            }
+            changeRangeValue(item, r, c, minval, maxval);
         }
 
         fireDatasetChanged();
 
+    }
+
+    private void changeRangeValue(BoxAndWhiskerItem item, int r, int c, double minval, double maxval) {
+        if (Double.isNaN(this.maximumRangeValue)) {
+            this.maximumRangeValue = maxval;
+            this.maximumRangeValueRow = r;
+            this.maximumRangeValueColumn = c;
+        }
+        else if (maxval > this.maximumRangeValue) {
+            this.maximumRangeValue = maxval;
+            this.maximumRangeValueRow = r;
+            this.maximumRangeValueColumn = c;
+        }
+
+        if (Double.isNaN(this.minimumRangeValue)) {
+            this.minimumRangeValue = minval;
+            this.minimumRangeValueRow = r;
+            this.minimumRangeValueColumn = c;
+        }
+        else if (minval < this.minimumRangeValue) {
+            this.minimumRangeValue = minval;
+            this.minimumRangeValueRow = r;
+            this.minimumRangeValueColumn = c;
+        }
     }
 
     /**
