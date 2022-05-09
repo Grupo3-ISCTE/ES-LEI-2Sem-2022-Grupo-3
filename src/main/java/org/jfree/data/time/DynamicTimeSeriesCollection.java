@@ -155,7 +155,7 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
      * The position within a time period to return as the x-value (START,
      * MIDDLE or END).
      */
-    private int position;
+    int position;
 
     /**
      * A flag that indicates that the domain is 'points in time'.  If this flag
@@ -703,7 +703,7 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
     @Override
     public Number getX(int series, int item) {
         RegularTimePeriod tp = this.pointsInTime[translateGet(item)];
-        return getX(tp);
+        return tp.getX(this);
     }
 
     /**
@@ -867,26 +867,6 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
         }
         return this.domainRange;
     }
-
-    /**
-     * Returns the x-value for a time period.
-     *
-     * @param period  the period.
-     *
-     * @return The x-value.
-     */
-    private long getX(RegularTimePeriod period) {
-        switch (this.position) {
-            case (START) :
-                return period.getFirstMillisecond(this.workingCalendar);
-            case (MIDDLE) :
-                return period.getMiddleMillisecond(this.workingCalendar);
-            case (END) :
-                return period.getLastMillisecond(this.workingCalendar);
-            default:
-                return period.getMiddleMillisecond(this.workingCalendar);
-        }
-     }
 
     // The next 3 functions implement the RangeInfo interface.
     // Using saved limits (updated by each updateTime() call) significantly
