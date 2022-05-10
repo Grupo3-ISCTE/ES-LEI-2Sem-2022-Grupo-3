@@ -101,9 +101,9 @@ public class VectorSeriesTest implements SeriesChangeListener {
         assertEquals(s2, s1);
 
         // remove a value
-        s1.remove(new XYCoordinate(1.0, 0.5));
+        s1.remove(new VectorDataItem.XYCoordinate(1.0, 0.5));
         assertNotEquals(s1, s2);
-        s2.remove(new XYCoordinate(1.0, 0.5));
+        s2.remove(new VectorDataItem.XYCoordinate(1.0, 0.5));
         assertEquals(s2, s1);
     }
 
@@ -146,7 +146,7 @@ public class VectorSeriesTest implements SeriesChangeListener {
         s1.add(1.0, 1.0, 1.0, 2.0);
         s1.add(2.0, 2.0, 2.0, 3.0);
         s1.add(3.0, 3.0, 3.0, 4.0);
-        assertEquals(0, s1.indexOf(new XYCoordinate(1.0, 1.0)));
+        assertEquals(0, s1.indexOf(new VectorDataItem.XYCoordinate(1.0, 1.0)));
     }
 
     /**
@@ -158,9 +158,9 @@ public class VectorSeriesTest implements SeriesChangeListener {
         s1.add(1.0, 1.0, 1.0, 2.0);
         s1.add(3.0, 3.0, 3.0, 3.0);
         s1.add(2.0, 2.0, 2.0, 2.0);
-        assertEquals(0, s1.indexOf(new XYCoordinate(1.0, 1.0)));
-        assertEquals(1, s1.indexOf(new XYCoordinate(3.0, 3.0)));
-        assertEquals(2, s1.indexOf(new XYCoordinate(2.0, 2.0)));
+        assertEquals(0, s1.indexOf(new VectorDataItem.XYCoordinate(1.0, 1.0)));
+        assertEquals(1, s1.indexOf(new VectorDataItem.XYCoordinate(3.0, 3.0)));
+        assertEquals(2, s1.indexOf(new VectorDataItem.XYCoordinate(2.0, 2.0)));
     }
 
     /**
@@ -174,10 +174,10 @@ public class VectorSeriesTest implements SeriesChangeListener {
         s1.add(2.0, 2.0, 2.0, 2.0);
         assertEquals(3, s1.getItemCount());
 
-        s1.remove(new XYCoordinate(2.0, 2.0));
+        s1.remove(new VectorDataItem.XYCoordinate(2.0, 2.0));
         assertEquals(3.0, s1.getXValue(1), EPSILON);
 
-        s1.remove(new XYCoordinate(1.0, 1.0));
+        s1.remove(new VectorDataItem.XYCoordinate(1.0, 1.0));
         assertEquals(3.0, s1.getXValue(0), EPSILON);
     }
 

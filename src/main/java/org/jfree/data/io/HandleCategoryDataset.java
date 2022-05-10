@@ -16,6 +16,8 @@ public class HandleCategoryDataset {
         this.fieldDelimiter = fieldDelimiter;
     }
 
+    public char getFieldDelimiter() { return fieldDelimiter; }
+
     /**
      * Reads a  {@link CategoryDataset}  from a CSV file or input source.
      * @param in   the input source.
