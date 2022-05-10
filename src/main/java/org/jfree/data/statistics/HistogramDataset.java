@@ -129,7 +129,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @param maximum  the upper bound of the bin range.
      */
     public void addSeries(Comparable key, double[] values, int bins,
-            double minimum, double maximum) {
+                          double minimum, double maximum) {
 
         Args.nullNotPermitted(key, "key");
         Args.nullNotPermitted(values, "values");
@@ -142,6 +142,22 @@ public class HistogramDataset extends AbstractIntervalXYDataset
         double lower = minimum;
         double upper;
         List<HistogramBin> binList = new ArrayList<>(bins);
+        binList = getBinList(bins, minimum, maximum, binWidth, lower, binList);
+        // fill the bins
+        referente_ao_de_cima_7z2(values, bins, minimum, maximum, binList);
+        // generic map for each series
+        Map<String, Object> map = new HashMap<>();
+        map.put("key", key);
+        map.put("bins", binList);
+        map.put("values.length", values.length);
+        map.put("bin width", binWidth);
+        this.list.add(map);
+        fireDatasetChanged();
+    }
+
+    private List<HistogramBin> getBinList(int bins, double minimum, double maximum, double binWidth, double lower,
+                                          List<HistogramBin> binList) {
+        double upper;
         for (int i = 0; i < bins; i++) {
             HistogramBin bin;
             // make sure bins[bins.length]'s upper boundary ends at maximum
@@ -157,7 +173,10 @@ public class HistogramDataset extends AbstractIntervalXYDataset
             }
             binList.add(bin);
         }
-        // fill the bins
+        return binList;
+    }
+    private void referente_ao_de_cima_7z2(double[] values, int bins, double minimum, double maximum,
+                                          List<HistogramBin> binList) {
         for (int i = 0; i < values.length; i++) {
             int binIndex = bins - 1;
             if (values[i] < maximum) {
@@ -176,16 +195,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
             HistogramBin bin = (HistogramBin) binList.get(binIndex);
             bin.incrementCount();
         }
-        // generic map for each series
-        Map<String, Object> map = new HashMap<>();
-        map.put("key", key);
-        map.put("bins", binList);
-        map.put("values.length", values.length);
-        map.put("bin width", binWidth);
-        this.list.add(map);
-        fireDatasetChanged();
     }
-
     /**
      * Returns the minimum value in an array of values.
      *

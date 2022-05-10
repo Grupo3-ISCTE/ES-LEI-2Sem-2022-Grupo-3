@@ -53,7 +53,6 @@ import java.util.TimeZone;
 import org.jfree.chart.TestUtils;
 import org.jfree.chart.api.RectangleEdge;
 
-import org.jfree.data.time.DateRange;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
 import org.jfree.data.time.Millisecond;
@@ -172,25 +171,6 @@ public class DateAxisTest {
         assertEquals(a1, a2);
     }
 
-    /**
-     * Test that the setRange() method works.
-     */
-    @Test
-    public void testSetRange() {
-
-        DateAxis axis = new DateAxis("Test Axis");
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1999, Calendar.JANUARY, 3);
-        Date d1 = calendar.getTime();
-        calendar.set(1999, Calendar.JANUARY, 31);
-        Date d2 = calendar.getTime();
-        axis.setRange(d1, d2);
-
-        DateRange range = (DateRange) axis.getRange();
-        assertEquals(d1, range.getLowerDate());
-        assertEquals(d2, range.getUpperDate());
-
-    }
 
     /**
      * Test that the setMaximumDate() method works.

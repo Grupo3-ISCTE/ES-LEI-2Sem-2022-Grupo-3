@@ -144,7 +144,7 @@ public class XYIntervalDataItem extends ComparableObjectItem {
         }
     }
 
-    private static class XYInterval implements Serializable {
+    static class XYInterval implements Serializable {
 
         /** The lower bound of the x-interval. */
         private double xLow;

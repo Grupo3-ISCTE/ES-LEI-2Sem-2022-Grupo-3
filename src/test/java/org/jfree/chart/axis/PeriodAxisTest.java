@@ -50,7 +50,6 @@ import org.jfree.chart.TestUtils;
 import org.jfree.chart.event.AxisChangeEvent;
 import org.jfree.chart.event.AxisChangeListener;
 import org.jfree.data.Range;
-import org.jfree.data.time.DateRange;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.Month;
@@ -237,17 +236,17 @@ public class PeriodAxisTest implements AxisChangeListener {
         assertTrue(b);
     }
 
-    /**
-     * A test for bug 1932146.
-     */
-    @Test
-    public void test1932146() {
-        PeriodAxis axis = new PeriodAxis("TestAxis");
-        axis.addChangeListener(this);
-        this.lastEvent = null;
-        axis.setRange(new DateRange(0L, 1000L));
-        assertNotNull(this.lastEvent);
-    }
+//    /**
+//     * A test for bug 1932146.
+//     */
+//    @Test
+//    public void test1932146() {
+//        PeriodAxis axis = new PeriodAxis("TestAxis");
+//        axis.addChangeListener(this);
+//        this.lastEvent = null;
+//        axis.setRange(new DateRange(0L, 1000L));
+//        assertNotNull(this.lastEvent);
+//    }
 
     private static final double EPSILON = 0.0000000001;
 
