@@ -2205,12 +2205,8 @@ public final class DatasetUtils {
                     }
                 }
             }
-            if (positive > maximum) {
-                maximum = positive;
-            }
-            if (negative < minimum) {
-                minimum = negative;
-            }
+            maximum = updateMaximum(maximum, positive);
+            minimum = updateMinimum(minimum, negative);
         }
         if (minimum <= maximum) {
             return new Range(minimum, maximum);
@@ -2218,6 +2214,30 @@ public final class DatasetUtils {
         else {
             return null;
         }
+    }
+
+    /**
+     * @param minimum
+     * @param negative
+     * @return
+     */
+    private static double updateMinimum(double minimum, double negative) {
+        if (negative < minimum) {
+            minimum = negative;
+        }
+        return minimum;
+    }
+
+    /**
+     * @param maximum
+     * @param positive
+     * @return
+     */
+    private static double updateMaximum(double maximum, double positive) {
+        if (positive > maximum) {
+            maximum = positive;
+        }
+        return maximum;
     }
 
     /**

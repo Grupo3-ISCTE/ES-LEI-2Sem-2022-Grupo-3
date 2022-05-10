@@ -527,22 +527,34 @@ public class TimeSeriesCollection<S extends Comparable<S>>
         for (TimeSeries<S> series : this.data) {
             int count = series.getItemCount();
             if (count > 0) {
-                RegularTimePeriod start = series.getTimePeriod(0);
-                RegularTimePeriod end = series.getTimePeriod(count - 1);
-                Range temp;
-                if (!includeInterval) {
-                    temp = new Range(getX(start), getX(end));
-                }
-                else {
-                    temp = new Range(
-                            start.getFirstMillisecond(this.workingCalendar),
-                            end.getLastMillisecond(this.workingCalendar));
-                }
+                Range temp = getTemp(includeInterval, series, count);
                 result = Range.combine(result, temp);
             }
         }
         return result;
     }
+
+    /**
+     * @param includeInterval
+     * @param series
+     * @param count
+     * @return
+     */
+    private Range getTemp(boolean includeInterval, TimeSeries<S> series, int count) {
+        RegularTimePeriod start = series.getTimePeriod(0);
+        RegularTimePeriod end = series.getTimePeriod(count - 1);
+        Range temp;
+        if (!includeInterval) {
+            temp = new Range(getX(start), getX(end));
+        }
+        else {
+            temp = new Range(
+                    start.getFirstMillisecond(this.workingCalendar),
+                    end.getLastMillisecond(this.workingCalendar));
+        }
+        return temp;
+    }
+
 
     /**
      * Returns the bounds of the domain values for the specified series.

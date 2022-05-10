@@ -371,43 +371,66 @@ public class TimePeriodValuesCollection extends AbstractIntervalXYDataset
         for (TimePeriodValues series : this.data) {
             int count = series.getItemCount();
             if (count > 0) {
-                TimePeriod start = series.getTimePeriod(
-                        series.getMinStartIndex());
-                TimePeriod end = series.getTimePeriod(series.getMaxEndIndex());
-                if (!interval) {
-                    if (this.xPosition == TimePeriodAnchor.START) {
-                        TimePeriod maxStart = series.getTimePeriod(
-                                series.getMaxStartIndex());
-                        temp = new Range(start.getStart().getTime(),
-                                maxStart.getStart().getTime());
-                    }
-                    else if (this.xPosition == TimePeriodAnchor.MIDDLE) {
-                        TimePeriod minMiddle = series.getTimePeriod(
-                                series.getMinMiddleIndex());
-                        long s1 = minMiddle.getStart().getTime();
-                        long e1 = minMiddle.getEnd().getTime();
-                        TimePeriod maxMiddle = series.getTimePeriod(
-                                series.getMaxMiddleIndex());
-                        long s2 = maxMiddle.getStart().getTime();
-                        long e2 = maxMiddle.getEnd().getTime();
-                        temp = new Range(s1 + (e1 - s1) / 2.0,
-                                s2 + (e2 - s2) / 2.0);
-                    }
-                    else if (this.xPosition == TimePeriodAnchor.END) {
-                        TimePeriod minEnd = series.getTimePeriod(
-                                series.getMinEndIndex());
-                        temp = new Range(minEnd.getEnd().getTime(),
-                                end.getEnd().getTime());
-                    }
-                }
-                else {
-                    temp = new Range(start.getStart().getTime(),
-                            end.getEnd().getTime());
-                }
+                temp = getTemp(interval, temp, series);
                 result = Range.combine(result, temp);
             }
         }
         return result;
+    }
+
+    /**
+     * @param interval
+     * @param temp
+     * @param series
+     * @return
+     */
+    private Range getTemp(boolean interval, Range temp, TimePeriodValues series) {
+        TimePeriod start = series.getTimePeriod(
+                series.getMinStartIndex());
+        TimePeriod end = series.getTimePeriod(series.getMaxEndIndex());
+        if (!interval) {
+            temp = calculateTemp(temp, series, start, end);
+        }
+        else {
+            temp = new Range(start.getStart().getTime(),
+                    end.getEnd().getTime());
+        }
+        return temp;
+    }
+
+    /**
+     * @param temp
+     * @param series
+     * @param start
+     * @param end
+     * @return
+     */
+    private Range calculateTemp(Range temp, TimePeriodValues series, TimePeriod start, TimePeriod end) {
+        if (this.xPosition == TimePeriodAnchor.START) {
+            TimePeriod maxStart = series.getTimePeriod(
+                    series.getMaxStartIndex());
+            temp = new Range(start.getStart().getTime(),
+                    maxStart.getStart().getTime());
+        }
+        else if (this.xPosition == TimePeriodAnchor.MIDDLE) {
+            TimePeriod minMiddle = series.getTimePeriod(
+                    series.getMinMiddleIndex());
+            long s1 = minMiddle.getStart().getTime();
+            long e1 = minMiddle.getEnd().getTime();
+            TimePeriod maxMiddle = series.getTimePeriod(
+                    series.getMaxMiddleIndex());
+            long s2 = maxMiddle.getStart().getTime();
+            long e2 = maxMiddle.getEnd().getTime();
+            temp = new Range(s1 + (e1 - s1) / 2.0,
+                    s2 + (e2 - s2) / 2.0);
+        }
+        else if (this.xPosition == TimePeriodAnchor.END) {
+            TimePeriod minEnd = series.getTimePeriod(
+                    series.getMinEndIndex());
+            temp = new Range(minEnd.getEnd().getTime(),
+                    end.getEnd().getTime());
+        }
+        return temp;
     }
 
     /**
