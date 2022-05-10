@@ -395,11 +395,7 @@ public class Millisecond extends RegularTimePeriod implements Serializable {
         // CASE 2 : Comparing to another TimePeriod object
         // -----------------------------------------------
         else if (obj instanceof RegularTimePeriod) {
-            RegularTimePeriod rtp = (RegularTimePeriod) obj;
-            final long thisVal = this.getFirstMillisecond();
-            final long anotherVal = rtp.getFirstMillisecond();
-            result = (thisVal < anotherVal ? -1
-                    : (thisVal == anotherVal ? 0 : 1));
+            result = compareTimePeriod(obj);
         }
 
         // CASE 3 : Comparing to a non-TimePeriod object
@@ -409,6 +405,20 @@ public class Millisecond extends RegularTimePeriod implements Serializable {
             result = 1;
         }
 
+        return result;
+    }
+
+    /**
+     * @param obj
+     * @return
+     */
+    private int compareTimePeriod(Object obj) {
+        int result;
+        RegularTimePeriod rtp = (RegularTimePeriod) obj;
+        final long thisVal = this.getFirstMillisecond();
+        final long anotherVal = rtp.getFirstMillisecond();
+        result = (thisVal < anotherVal ? -1
+                : (thisVal == anotherVal ? 0 : 1));
         return result;
     }
 

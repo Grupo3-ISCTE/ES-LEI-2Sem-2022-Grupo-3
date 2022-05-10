@@ -37,13 +37,12 @@
 package org.jfree.data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.jfree.chart.internal.CloneUtils;
 import org.jfree.chart.internal.Args;
 import org.jfree.chart.api.PublicCloneable;
+import org.jfree.data.general.WaferMapDataset;
 
 /**
  * A data structure that stores zero, one or many values, where each value
@@ -553,4 +552,43 @@ public class DefaultKeyedValues2D<R extends Comparable<R>, C extends Comparable<
         return clone;
     }
 
+    /**
+     * Returns the set of unique values.
+     *
+     * @return The set of unique values.
+     * @param waferMapDataset
+     */
+    public Set getUniqueValues(WaferMapDataset waferMapDataset) {
+        Set unique = new TreeSet();
+        //step through all the values and add them to the hash
+        for (int r = 0; r < getRowCount(); r++) {
+            for (int c = 0; c < getColumnCount(); c++) {
+                Number value = getValue(r, c);
+                if (value != null) {
+                    unique.add(value);
+                }
+            }
+        }
+        return unique;
+    }
+
+    /**
+     * Returns the value for a given chip x and y or null.
+     *
+     * @param chipx  the x-index.
+     * @param chipy  the y-index.
+     *
+     * @return The data value.
+     */
+    public Number getChipValue(R chipx, C chipy) {
+        int rowIndex = getRowIndex(chipx);
+        if (rowIndex < 0) {
+            return null;
+        }
+        int colIndex = getColumnIndex(chipy);
+        if (colIndex < 0) {
+            return null;
+        }
+        return getValue(rowIndex, colIndex);
+    }
 }

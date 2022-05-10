@@ -121,7 +121,9 @@ public abstract class Statistics {
      *
      * @since 1.0.3
      */
-    public static double calculateMean(Collection values, boolean includeNullAndNaN) {
+    public static double calculateMean(Collection values,
+            boolean includeNullAndNaN) {
+
         Args.nullNotPermitted(values, "values");
         int count = 0;
         double total = 0.0;
@@ -443,6 +445,24 @@ public abstract class Statistics {
             result[i][1] = sum;
         }
         return result;
+
+    }
+
+    /**
+     * @param xData
+     * @param yData
+     * @param period
+     */
+    private static void isValid(Number[] xData, Number[] yData, int period) {
+        // check arguments...
+        if (xData.length != yData.length) {
+            throw new IllegalArgumentException("Array lengths must be equal.");
+        }
+
+        if (period > xData.length) {
+            throw new IllegalArgumentException(
+                    "Period can't be longer than dataset.");
+        }
     }
 
 }
