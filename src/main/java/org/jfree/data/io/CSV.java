@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+ * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
  * Other names may be trademarks of their respective owners.]
  *
  * --------
@@ -55,8 +55,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  */
 public class CSV {
 
-    /** The field delimiter. */
-    private char fieldDelimiter;
+    private HandleCategoryDataset handleCategoryDataset = new HandleCategoryDataset();
 
     /** The text delimiter. */
     private char textDelimiter;
@@ -78,7 +77,7 @@ public class CSV {
      *                       quote).
      */
     public CSV(char fieldDelimiter, char textDelimiter) {
-        this.fieldDelimiter = fieldDelimiter;
+        handleCategoryDataset.setFieldDelimiter(fieldDelimiter);
         this.textDelimiter = textDelimiter;
     }
 
@@ -93,90 +92,8 @@ public class CSV {
      */
     public CategoryDataset readCategoryDataset(Reader in) throws IOException {
 
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        BufferedReader reader = new BufferedReader(in);
-        List columnKeys = null;
-        int lineIndex = 0;
-        String line = reader.readLine();
-        while (line != null) {
-            if (lineIndex == 0) {  // first line contains column keys
-                columnKeys = extractColumnKeys(line);
-            }
-            else {  // remaining lines contain a row key and data values
-                extractRowKeyAndData(line, dataset, columnKeys);
-            }
-            line = reader.readLine();
-            lineIndex++;
-        }
-        return dataset;
+        return handleCategoryDataset.readCategoryDataset(in, this);
 
-    }
-
-    /**
-     * Extracts the column keys from a string.
-     *
-     * @param line  a line from the input file.
-     *
-     * @return A list of column keys.
-     */
-    private List extractColumnKeys(String line) {
-        List keys = new java.util.ArrayList();
-        int fieldIndex = 0;
-        int start = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == this.fieldDelimiter) {
-                if (fieldIndex > 0) {  // first field is ignored, since
-                                       // column 0 is for row keys
-                    String key = line.substring(start, i);
-                    keys.add(removeStringDelimiters(key));
-                }
-                start = i + 1;
-                fieldIndex++;
-            }
-        }
-        String key = line.substring(start, line.length());
-        keys.add(removeStringDelimiters(key));
-        return keys;
-    }
-
-    /**
-     * Extracts the row key and data for a single line from the input source.
-     *
-     * @param line  the line from the input source.
-     * @param dataset  the dataset to be populated.
-     * @param columnKeys  the column keys.
-     */
-    private void extractRowKeyAndData(String line,
-                                      DefaultCategoryDataset dataset,
-                                      List columnKeys) {
-        Comparable rowKey = null;
-        int fieldIndex = 0;
-        int start = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == this.fieldDelimiter) {
-                if (fieldIndex == 0) {  // first field contains the row key
-                    String key = line.substring(start, i);
-                    rowKey = removeStringDelimiters(key);
-                }
-                else {  // remaining fields contain values
-                    Double value = Double.valueOf(
-                        removeStringDelimiters(line.substring(start, i))
-                    );
-                    dataset.addValue(
-                        value, rowKey,
-                        (Comparable) columnKeys.get(fieldIndex - 1)
-                    );
-                }
-                start = i + 1;
-                fieldIndex++;
-            }
-        }
-        Double value = Double.valueOf(
-            removeStringDelimiters(line.substring(start, line.length()))
-        );
-        dataset.addValue(
-            value, rowKey, (Comparable) columnKeys.get(fieldIndex - 1)
-        );
     }
 
     /**
@@ -187,7 +104,7 @@ public class CSV {
      *
      * @return The key without delimiters.
      */
-    private String removeStringDelimiters(String key) {
+    public String removeStringDelimiters(String key) {
         String k = key.trim();
         if (k.charAt(0) == this.textDelimiter) {
             k = k.substring(1);
