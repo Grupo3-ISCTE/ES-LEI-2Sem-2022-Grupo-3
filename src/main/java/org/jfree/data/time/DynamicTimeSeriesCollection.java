@@ -527,12 +527,31 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
     public synchronized RegularTimePeriod advanceTime() {
         RegularTimePeriod nextInstant = this.pointsInTime[this.newestAt].next();
         this.newestAt = this.oldestAt;  // newestAt takes value previously held
-                                        // by oldestAT
+        // by oldestAT
         /***
          * The next 10 lines or so should be expanded if data can be negative
          ***/
         // if the oldest data contained a maximum Y-value, invalidate the stored
         //   Y-max and Y-range data:
+        boolean extremaChanged = isExtremeChanged();  /*** If data can be < 0, add code here to check the minimum    **/
+        if (extremaChanged) {
+            invalidateRangeInfo();
+        }
+        wipeNext();
+        // Update the array of TimePeriods:
+        this.pointsInTime[this.newestAt] = nextInstant;
+        // Now advance "oldestAt", wrapping at end of the array
+        this.oldestAt++;
+        if (this.oldestAt >= this.historyCount) {
+            this.oldestAt = 0;
+        }
+        return updateDomainLimits(nextInstant);
+    }
+
+    /**
+     * @return
+     */
+    private boolean isExtremeChanged() {
         boolean extremaChanged = false;
         float oldMax = 0.0f;
         if (this.maxValue != null) {
@@ -545,22 +564,26 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
             if (extremaChanged) {
                 break;
             }
-        }  /*** If data can be < 0, add code here to check the minimum    **/
-        if (extremaChanged) {
-            invalidateRangeInfo();
         }
+        return extremaChanged;
+    }
+
+    /**
+     *
+     */
+    private void wipeNext() {
         //  wipe the next (about to be used) set of data slots
         float wiper = (float) 0.0;
         for (int s = 0; s < getSeriesCount(); s++) {
             this.valueHistory[s].enterData(this.newestAt, wiper);
         }
-        // Update the array of TimePeriods:
-        this.pointsInTime[this.newestAt] = nextInstant;
-        // Now advance "oldestAt", wrapping at end of the array
-        this.oldestAt++;
-        if (this.oldestAt >= this.historyCount) {
-            this.oldestAt = 0;
-        }
+    }
+
+    /**
+     * @param nextInstant
+     * @return
+     */
+    private RegularTimePeriod updateDomainLimits(RegularTimePeriod nextInstant) {
         // Update the domain limits:
         long startL = this.domainStart;  //(time is kept in msec)
         this.domainStart = startL + this.deltaTime;

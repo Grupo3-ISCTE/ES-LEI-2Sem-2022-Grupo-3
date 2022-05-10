@@ -179,18 +179,7 @@ public class FixedMillisecond extends RegularTimePeriod
         // -------------------------------------------
         if (o1 instanceof FixedMillisecond) {
             FixedMillisecond t1 = (FixedMillisecond) o1;
-            difference = this.time - t1.time;
-            if (difference > 0) {
-                result = 1;
-            }
-            else {
-                if (difference < 0) {
-                   result = -1;
-                }
-                else {
-                    result = 0;
-                }
-            }
+            result = compareToSecondObject(t1);
         }
 
         // CASE 2 : Comparing to another TimePeriod object
@@ -209,6 +198,28 @@ public class FixedMillisecond extends RegularTimePeriod
 
         return result;
 
+    }
+
+    /**
+     * @param t1
+     * @return
+     */
+    private int compareToSecondObject(FixedMillisecond t1) {
+        int result;
+        long difference;
+        difference = this.time - t1.time;
+        if (difference > 0) {
+            result = 1;
+        }
+        else {
+            if (difference < 0) {
+                result = -1;
+            }
+            else {
+                result = 0;
+            }
+        }
+        return result;
     }
 
     /**
