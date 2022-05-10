@@ -424,15 +424,10 @@ public abstract class Statistics {
      *         with two doubles for x and y in the second dimension
      */
     public static double[][] getMovingAverage(Number[] xData, Number[] yData,
-            int period) {
-        // check arguments...
-        if (xData.length != yData.length) {
-            throw new IllegalArgumentException("Array lengths must be equal.");
-        }
-        if (period > xData.length) {
-            throw new IllegalArgumentException(
-                "Period can't be longer than dataset.");
-        }
+                                              int period) {
+
+        isValid(xData, yData, period);
+
         double[][] result = new double[xData.length - period][2];
         for (int i = 0; i < result.length; i++) {
             result[i][0] = xData[i + period].doubleValue();
