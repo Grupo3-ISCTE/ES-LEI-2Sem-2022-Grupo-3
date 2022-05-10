@@ -86,21 +86,7 @@ public abstract class BoxAndWhiskerCalculator {
         Args.nullNotPermitted(values, "values");
 
         List vlist;
-        if (stripNullAndNaNItems) {
-            vlist = new ArrayList(values.size());
-            for (Object obj : values) {
-                if (obj instanceof Number) {
-                    Number n = (Number) obj;
-                    double v = n.doubleValue();
-                    if (!Double.isNaN(v)) {
-                        vlist.add(n);
-                    }
-                }
-            }
-        }
-        else {
-            vlist = values;
-        }
+        vlist = getVlist(values, stripNullAndNaNItems);
         Collections.sort(vlist);
 
         double mean = Statistics.calculateMean(vlist, false);
@@ -122,6 +108,44 @@ public abstract class BoxAndWhiskerCalculator {
         double maxOutlier = Double.NEGATIVE_INFINITY;
         List<Number> outliers = new ArrayList<>();
 
+        Object[] data_objects = getOutliersData(vlist, outliers, upperOutlierThreshold, lowerOutlierThreshold, upperFaroutThreshold, lowerFaroutThreshold, minRegularValue, maxRegularValue, minOutlier, maxOutlier);
+
+        minRegularValue = (double)data_objects[0];
+        maxRegularValue = (double)data_objects[1];
+        minOutlier = (double)data_objects[2];
+        maxOutlier = (double)data_objects[3];
+        outliers = (List<Number>)data_objects[4];
+
+        return new BoxAndWhiskerItem(mean, median, q1, q3, minRegularValue,
+                maxRegularValue, minOutlier, maxOutlier, outliers);
+
+    }
+
+    private static List getVlist(List<? extends Number> values, boolean stripNullAndNaNItems) {
+        List vlist;
+        if (stripNullAndNaNItems) {
+            vlist = new ArrayList(values.size());
+            for (Object obj : values) {
+                if (obj instanceof Number) {
+                    Number n = (Number) obj;
+                    double v = n.doubleValue();
+                    if (!Double.isNaN(v)) {
+                        vlist.add(n);
+                    }
+                }
+            }
+        }
+        else {
+            vlist = values;
+        }
+        return vlist;
+    }
+
+    static Object[] getOutliersData(List vlist, List<Number> outliers
+            , double upperOutlierThreshold, double lowerOutlierThreshold
+            , double upperFaroutThreshold, double lowerFaroutThreshold
+            , double minRegularValue, double maxRegularValue
+            , double minOutlier, double maxOutlier) {
         for (Object o : vlist) {
             Number number = (Number) o;
             double value = number.doubleValue();
@@ -145,9 +169,7 @@ public abstract class BoxAndWhiskerCalculator {
             maxOutlier = Math.max(maxOutlier, maxRegularValue);
         }
 
-        return new BoxAndWhiskerItem(mean, median, q1, q3, minRegularValue,
-                maxRegularValue, minOutlier, maxOutlier, outliers);
-
+        return new Object[]{minRegularValue, maxRegularValue, minOutlier, maxOutlier, outliers};
     }
 
     /**

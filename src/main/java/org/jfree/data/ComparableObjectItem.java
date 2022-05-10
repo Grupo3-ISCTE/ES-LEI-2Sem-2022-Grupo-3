@@ -40,6 +40,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.jfree.chart.internal.Args;
+import org.jfree.chart.internal.HashUtils;
+import org.jfree.data.time.ohlc.OHLCItem;
 
 /**
  * Represents one (Comparable, Object) data item for use in a

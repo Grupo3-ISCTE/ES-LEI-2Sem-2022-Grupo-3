@@ -43,7 +43,6 @@
  */
 
 package org.jfree.chart;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.text.DateFormat;

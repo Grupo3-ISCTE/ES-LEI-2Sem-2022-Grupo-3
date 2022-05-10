@@ -39,6 +39,8 @@ package org.jfree.data.statistics;
 import org.jfree.chart.internal.Args;
 import org.jfree.data.xy.XYDataset;
 
+import java.util.Objects;
+
 /**
  * A utility class for fitting regression curves to data.
  */
@@ -98,12 +100,10 @@ public abstract class Regression {
      * @return The parameters.
      */
     public static double[] getOLSRegression(XYDataset data, int series) {
-
         int n = data.getItemCount(series);
         if (n < 2) {
             throw new IllegalArgumentException("Not enough data.");
         }
-
         double sumX = 0;
         double sumY = 0;
         double sumXX = 0;
@@ -126,9 +126,7 @@ public abstract class Regression {
         double[] result = new double[2];
         result[1] = sxy / sxx;
         result[0] = ybar - result[1] * xbar;
-
         return result;
-
     }
 
     /**
@@ -264,7 +262,58 @@ public abstract class Regression {
         double[][] matrix = new double[equations][coefficients];
         double sumX = 0.0;
         double sumY = 0.0;
+        sumY = getSumY(validItems, data, equations, coefficients, matrix, sumX, sumY);
+        result = processResult(result, matrix, equations, coefficients);
+        double meanY = sumY / validItems;
+        double yObsSquare = 0.0;
+        double yRegSquare = 0.0;
+        for (int item = 0; item < validItems; item++) {
+            yRegSquare = getyRegSquare(getyCalc(data[0][item], equations, result), meanY, yRegSquare);
+            yObsSquare += Math.pow(data[1][item] - meanY, 2);
+        }
+        double rSquare = yRegSquare / yObsSquare;
+        result[equations] = rSquare;
+        return result;
+    }
 
+    static double[] processResult(double[] result, double[][] matrix, int equations, int coefficients){
+        double[][] subMatrix = calculateSubMatrix(matrix);
+        for (int eq = 1; eq < equations; eq++) {
+            matrix[eq][0] = 0;
+            for (int coe = 1; coe < coefficients; coe++) {
+                matrix[eq][coe] = subMatrix[eq - 1][coe - 1];
+            }
+        }
+        for (int eq = equations - 1; eq > -1; eq--) {
+            double value = matrix[eq][coefficients - 1];
+            value = getValue(coefficients, result, matrix[eq], eq, value);
+            result[eq] = value / matrix[eq][eq];
+        }
+        return result;
+    }
+
+    private static double getyRegSquare(double yCalc1, double meanY, double yRegSquare) {
+        double yCalc = yCalc1;
+        yRegSquare += Math.pow(yCalc - meanY, 2);
+        return yRegSquare;
+    }
+
+    private static double getyCalc(double a, int equations, double[] result) {
+        double yCalc = 0;
+        for (int eq = 0; eq < equations; eq++) {
+            yCalc += result[eq] * Math.pow(a,eq);
+        }
+        return yCalc;
+    }
+
+    private static double getValue(int coefficients, double[] result, double[] matrix, int eq, double value) {
+        for (int coe = eq; coe < coefficients -1; coe++) {
+            value -= matrix[coe] * result[coe];
+        }
+        return value;
+    }
+
+    private static double getSumY(int validItems, double[][] data, int equations, int coefficients, double[][] matrix, double sumX, double sumY) {
         for(int item = 0; item < validItems; item++){
             sumX += data[0][item];
             sumY += data[1][item];
@@ -276,34 +325,7 @@ public abstract class Regression {
                         * Math.pow(data[0][item],eq);
             }
         }
-        double[][] subMatrix = calculateSubMatrix(matrix);
-        for (int eq = 1; eq < equations; eq++) {
-            matrix[eq][0] = 0;
-            for (int coe = 1; coe < coefficients; coe++) {
-                matrix[eq][coe] = subMatrix[eq - 1][coe - 1];
-            }
-        }
-        for (int eq = equations - 1; eq > -1; eq--) {
-            double value = matrix[eq][coefficients - 1];
-            for (int coe = eq; coe < coefficients -1; coe++) {
-                value -= matrix[eq][coe] * result[coe];
-            }
-            result[eq] = value / matrix[eq][eq];
-        }
-        double meanY = sumY / validItems;
-        double yObsSquare = 0.0;
-        double yRegSquare = 0.0;
-        for (int item = 0; item < validItems; item++) {
-            double yCalc = 0;
-            for (int eq = 0; eq < equations; eq++) {
-                yCalc += result[eq] * Math.pow(data[0][item],eq);
-            }
-            yRegSquare += Math.pow(yCalc - meanY, 2);
-            yObsSquare += Math.pow(data[1][item] - meanY, 2);
-        }
-        double rSquare = yRegSquare / yObsSquare;
-        result[equations] = rSquare;
-        return result;
+        return sumY;
     }
 
     /**
@@ -311,7 +333,7 @@ public abstract class Regression {
      * and columns is 1 less than that of the original matrix; (2)the matrix
      * is triangular, i.e. all elements a (row, column) with column &gt; row are
      * zero.  This method is used for calculating a polynomial regression.
-     * 
+     *
      * @param matrix  the start matrix.
      *
      * @return The new matrix.
@@ -323,8 +345,7 @@ public abstract class Regression {
         for (int eq = 1; eq < equations; eq++) {
             double factor = matrix[0][0] / matrix[eq][0];
             for (int coe = 1; coe < coefficients; coe++) {
-                result[eq - 1][coe -1] = matrix[0][coe] - matrix[eq][coe]
-                        * factor;
+                result[eq - 1][coe -1] = matrix[0][coe] - matrix[eq][coe] * factor;
             }
         }
         if (equations == 1) {
@@ -333,16 +354,7 @@ public abstract class Regression {
         // check for zero pivot element
         if (result[0][0] == 0) {
             boolean found = false;
-            for (int i = 0; i < result.length; i ++) {
-                if (result[i][0] != 0) {
-                    found = true;
-                    double[] temp = result[0];
-                    System.arraycopy(result[i], 0, result[0], 0, 
-                            result[i].length);
-                    System.arraycopy(temp, 0, result[i], 0, temp.length);
-                    break;
-                }
-            }
+            found = checkForZeroPivot(result, found);
             if (!found) {
                 //System.out.println("Equation has no solution!");
                 return new double[equations - 1][coefficients - 1];
@@ -356,6 +368,20 @@ public abstract class Regression {
             }
         }
         return result;
+    }
+
+    private static boolean checkForZeroPivot(double[][] result, boolean found) {
+        for (int i = 0; i < result.length; i ++) {
+            if (result[i][0] != 0) {
+                found = true;
+                double[] temp = result[0];
+                System.arraycopy(result[i], 0, result[0], 0,
+                        result[i].length);
+                System.arraycopy(temp, 0, result[i], 0, temp.length);
+                break;
+            }
+        }
+        return found;
     }
 
 }
