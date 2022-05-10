@@ -38,7 +38,6 @@ package org.jfree.data.time.ohlc;
 
 import org.jfree.chart.internal.HashUtils;
 import org.jfree.chart.internal.Args;
-import org.jfree.chart.internal.Args;
 import org.jfree.data.ComparableObjectItem;
 import org.jfree.data.time.RegularTimePeriod;
 

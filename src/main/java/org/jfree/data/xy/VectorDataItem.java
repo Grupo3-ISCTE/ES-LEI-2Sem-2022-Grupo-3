@@ -126,7 +126,7 @@ public class VectorDataItem extends ComparableObjectItem {
         }
     }
 
-    private static class XYCoordinate implements Comparable, Serializable {
+    static class XYCoordinate implements Comparable, Serializable {
 
         /** The x-coordinate. */
         private double x;

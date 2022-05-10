@@ -765,7 +765,7 @@ public class DefaultStatisticalCategoryDataset<R extends Comparable<R>,
         return clone;
     }
 
-    private class MeanAndStandardDeviation implements Serializable {
+    static class MeanAndStandardDeviation implements Serializable {
 
         /** For serialization. */
         private static final long serialVersionUID = 7413468697315721515L;

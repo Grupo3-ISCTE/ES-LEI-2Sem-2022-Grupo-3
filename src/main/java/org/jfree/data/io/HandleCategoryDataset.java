@@ -12,13 +12,9 @@ import java.util.ArrayList;
 public class HandleCategoryDataset {
     private char fieldDelimiter;
 
-
-
     public void setFieldDelimiter(char fieldDelimiter) {
         this.fieldDelimiter = fieldDelimiter;
     }
-
-    public char getFieldDelimiter(){return this.fieldDelimiter;}
 
     /**
      * Reads a  {@link CategoryDataset}  from a CSV file or input source.

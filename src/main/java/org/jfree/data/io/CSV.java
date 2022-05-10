@@ -93,73 +93,7 @@ public class CSV {
     public CategoryDataset readCategoryDataset(Reader in) throws IOException {
 
         return handleCategoryDataset.readCategoryDataset(in, this);
-    }
 
-    /**
-     * Extracts the column keys from a string.
-     *
-     * @param line  a line from the input file.
-     *
-     * @return A list of column keys.
-     */
-    private List extractColumnKeys(String line) {
-        List keys = new java.util.ArrayList();
-        int fieldIndex = 0;
-        int start = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == handleCategoryDataset.getFieldDelimiter()) {
-                if (fieldIndex > 0) {  // first field is ignored, since
-                                       // column 0 is for row keys
-                    String key = line.substring(start, i);
-                    keys.add(removeStringDelimiters(key));
-                }
-                start = i + 1;
-                fieldIndex++;
-            }
-        }
-        String key = line.substring(start, line.length());
-        keys.add(removeStringDelimiters(key));
-        return keys;
-    }
-
-    /**
-     * Extracts the row key and data for a single line from the input source.
-     *
-     * @param line  the line from the input source.
-     * @param dataset  the dataset to be populated.
-     * @param columnKeys  the column keys.
-     */
-    private void extractRowKeyAndData(String line,
-                                      DefaultCategoryDataset dataset,
-                                      List columnKeys) {
-        Comparable rowKey = null;
-        int fieldIndex = 0;
-        int start = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == handleCategoryDataset.getFieldDelimiter()) {
-                if (fieldIndex == 0) {  // first field contains the row key
-                    String key = line.substring(start, i);
-                    rowKey = removeStringDelimiters(key);
-                }
-                else {  // remaining fields contain values
-                    Double value = Double.valueOf(
-                        removeStringDelimiters(line.substring(start, i))
-                    );
-                    dataset.addValue(
-                        value, rowKey,
-                        (Comparable) columnKeys.get(fieldIndex - 1)
-                    );
-                }
-                start = i + 1;
-                fieldIndex++;
-            }
-        }
-        Double value = Double.valueOf(
-            removeStringDelimiters(line.substring(start, line.length()))
-        );
-        dataset.addValue(
-            value, rowKey, (Comparable) columnKeys.get(fieldIndex - 1)
-        );
     }
 
     /**
