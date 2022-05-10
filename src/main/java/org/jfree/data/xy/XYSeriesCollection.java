@@ -526,14 +526,8 @@ public class XYSeriesCollection<S extends Comparable<S>>
             int seriesCount = getSeriesCount();
             for (int s = 0; s < seriesCount; s++) {
                 XYSeries<S> series = getSeries(s);
-                double minX = series.getMinX();
-                if (!Double.isNaN(minX)) {
-                    lower = Math.min(lower, minX);
-                }
-                double maxX = series.getMaxX();
-                if (!Double.isNaN(maxX)) {
-                    upper = Math.max(upper, maxX);
-                }
+                lower = getLower(lower, series);
+                upper = getUpper(upper, series);
             }
             if (lower > upper) {
                 return null;
@@ -542,6 +536,32 @@ public class XYSeriesCollection<S extends Comparable<S>>
                 return new Range(lower, upper);
             }
         }
+    }
+
+    /**
+     * @param upper
+     * @param series
+     * @return
+     */
+    private double getUpper(double upper, XYSeries<S> series) {
+        double maxX = series.getMaxX();
+        if (!Double.isNaN(maxX)) {
+            upper = Math.max(upper, maxX);
+        }
+        return upper;
+    }
+
+    /**
+     * @param lower
+     * @param series
+     * @return
+     */
+    private double getLower(double lower, XYSeries<S> series) {
+        double minX = series.getMinX();
+        if (!Double.isNaN(minX)) {
+            lower = Math.min(lower, minX);
+        }
+        return lower;
     }
 
     /**
