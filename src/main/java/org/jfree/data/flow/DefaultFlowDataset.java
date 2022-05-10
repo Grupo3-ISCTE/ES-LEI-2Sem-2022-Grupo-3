@@ -72,7 +72,7 @@ public class DefaultFlowDataset<K extends Comparable<K>> extends AbstractDataset
     private Map<NodeKey, Map<String, Object>> nodeProperties;
     
     /** Storage for the flows. */
-    private Map<FlowKey<K>, Number> flows;
+    Map<FlowKey<K>, Number> flows;
     
     /** Flow properties. */
     private Map<FlowKey, Map<String, Object>> flowProperties;
@@ -263,27 +263,6 @@ public class DefaultFlowDataset<K extends Comparable<K>> extends AbstractDataset
     @Override
     public Set<FlowKey<K>> getAllFlows() {
         return new HashSet<>(this.flows.keySet());    
-    }
-    
-    /**
-     * Returns a list of flow keys for all the flows coming into this node.
-     * 
-     * @param nodeKey  the node key ({@code null} not permitted).
-     * 
-     * @return A list of flow keys (possibly empty but never {@code null}). 
-     */
-    public List<FlowKey<K>> getInFlows(NodeKey nodeKey) {
-        Args.nullNotPermitted(nodeKey, "nodeKey");
-        if (nodeKey.getStage() == 0) {
-            return Collections.EMPTY_LIST;
-        }
-        List<FlowKey<K>> result = new ArrayList<>();
-        for (FlowKey<K> flowKey : this.flows.keySet()) {
-            if (flowKey.getStage() == nodeKey.getStage() - 1 && flowKey.getDestination().equals(nodeKey.getNode())) {
-                result.add(flowKey);
-            }
-        }
-        return result;
     }
 
     /**
