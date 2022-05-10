@@ -543,17 +543,48 @@ public class TimeSeries<S extends Comparable<S>> extends Series<S>
         if (this.timePeriodClass == null) {
             this.timePeriodClass = c;
         } else if (!this.timePeriodClass.equals(c)) {
-            StringBuilder b = new StringBuilder();
-            b.append("You are trying to add data where the time period class ");
-            b.append("is ");
-            b.append(item.getPeriod().getClass().getName());
-            b.append(", but the TimeSeries is expecting an instance of ");
-            b.append(this.timePeriodClass.getName());
-            b.append(".");
-            throw new SeriesException(b.toString());
+            exception(item);
         }
 
         // make the change (if it's not a duplicate time period)...
+        boolean added = makeChange(item);
+        if (added) {
+            updateBoundsForAddedItem(item);
+            // check if this addition will exceed the maximum item count...
+            if (getItemCount() > this.maximumItemCount) {
+                TimeSeriesDataItem d = this.data.remove(0);
+                updateBoundsForRemovedItem(d);
+            }
+
+            removeAgedItems(false);  // remove old items if necessary, but
+            // don't notify anyone, because that
+            // happens next anyway...
+            if (notify) {
+                fireSeriesChanged();
+            }
+        }
+
+    }
+
+    /**
+     * @param item
+     */
+    private void exception(TimeSeriesDataItem item) {
+        StringBuilder b = new StringBuilder();
+        b.append("You are trying to add data where the time period class ");
+        b.append("is ");
+        b.append(item.getPeriod().getClass().getName());
+        b.append(", but the TimeSeries is expecting an instance of ");
+        b.append(this.timePeriodClass.getName());
+        b.append(".");
+        throw new SeriesException(b.toString());
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    private boolean makeChange(TimeSeriesDataItem item) {
         boolean added = false;
         int count = getItemCount();
         if (count == 0) {
@@ -584,22 +615,7 @@ public class TimeSeries<S extends Comparable<S>> extends Series<S>
                 }
             }
         }
-        if (added) {
-            updateBoundsForAddedItem(item);
-            // check if this addition will exceed the maximum item count...
-            if (getItemCount() > this.maximumItemCount) {
-                TimeSeriesDataItem d = this.data.remove(0);
-                updateBoundsForRemovedItem(d);
-            }
-
-            removeAgedItems(false);  // remove old items if necessary, but
-                                     // don't notify anyone, because that
-                                     // happens next anyway...
-            if (notify) {
-                fireSeriesChanged();
-            }
-        }
-
+        return added;
     }
 
     /**
@@ -896,6 +912,14 @@ public class TimeSeries<S extends Comparable<S>> extends Series<S>
             throw new RuntimeException(e);
         }
 
+        isEarlierThanHistory(notify, index);
+    }
+
+    /**
+     * @param notify
+     * @param index
+     */
+    private void isEarlierThanHistory(boolean notify, long index) {
         // check if there are any values earlier than specified by the history
         // count...
         boolean removed = false;
@@ -1056,14 +1080,9 @@ public class TimeSeries<S extends Comparable<S>> extends Series<S>
      * @throws CloneNotSupportedException if there is a cloning problem.
      */
     public TimeSeries<S> createCopy(RegularTimePeriod start, RegularTimePeriod end)
-        throws CloneNotSupportedException {
+            throws CloneNotSupportedException {
 
-        Args.nullNotPermitted(start, "start");
-        Args.nullNotPermitted(end, "end");
-        if (start.compareTo(end) > 0) {
-            throw new IllegalArgumentException(
-                    "Requires start on or before end.");
-        }
+        isValid(start, end);
         boolean emptyRange = false;
         int startIndex = getIndex(start);
         if (startIndex < 0) {
@@ -1072,11 +1091,7 @@ public class TimeSeries<S extends Comparable<S>> extends Series<S>
                 emptyRange = true;  // start is after last data item
             }
         }
-        int endIndex = getIndex(end);
-        if (endIndex < 0) {             // end period is not in original series
-            endIndex = -(endIndex + 1); // this is first item AFTER end period
-            endIndex = endIndex - 1;    // so this is last item BEFORE end
-        }
+        int endIndex = getEndIndex(end);
         if ((endIndex < 0)  || (endIndex < startIndex)) {
             emptyRange = true;
         }
@@ -1086,6 +1101,32 @@ public class TimeSeries<S extends Comparable<S>> extends Series<S>
             return copy;
         }
         return createCopy(startIndex, endIndex);
+    }
+
+    /**
+     * @param end
+     * @return
+     */
+    private int getEndIndex(RegularTimePeriod end) {
+        int endIndex = getIndex(end);
+        if (endIndex < 0) {             // end period is not in original series
+            endIndex = -(endIndex + 1); // this is first item AFTER end period
+            endIndex = endIndex - 1;    // so this is last item BEFORE end
+        }
+        return endIndex;
+    }
+
+    /**
+     * @param start
+     * @param end
+     */
+    private void isValid(RegularTimePeriod start, RegularTimePeriod end) {
+        Args.nullNotPermitted(start, "start");
+        Args.nullNotPermitted(end, "end");
+        if (start.compareTo(end) > 0) {
+            throw new IllegalArgumentException(
+                    "Requires start on or before end.");
+        }
     }
 
     /**

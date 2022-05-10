@@ -36,9 +36,6 @@
 
 package org.jfree.data.general;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.jfree.data.DefaultKeyedValues2D;
 
 /**
@@ -51,7 +48,7 @@ public class WaferMapDataset extends AbstractDataset {
      * Storage structure for the data values (row key is chipx, column is
      * chipy)
      */
-    private DefaultKeyedValues2D data;
+    public DefaultKeyedValues2D data;
 
     /** wafer x dimension */
     private int maxChipX;
@@ -150,26 +147,7 @@ public class WaferMapDataset extends AbstractDataset {
      * @return The number of unique values.
      */
     public int getUniqueValueCount() {
-        return getUniqueValues().size();
-    }
-
-    /**
-     * Returns the set of unique values.
-     *
-     * @return The set of unique values.
-     */
-    public Set getUniqueValues() {
-        Set unique = new TreeSet();
-        //step through all the values and add them to the hash
-        for (int r = 0; r < this.data.getRowCount(); r++) {
-            for (int c = 0; c < this.data.getColumnCount(); c++) {
-                Number value = this.data.getValue(r, c);
-                if (value != null) {
-                    unique.add(value);
-                }
-            }
-        }
-        return unique;
+        return data.getUniqueValues(this).size();
     }
 
     /**

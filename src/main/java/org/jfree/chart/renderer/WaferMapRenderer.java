@@ -204,7 +204,7 @@ public class WaferMapRenderer extends AbstractRenderer {
         WaferMapDataset data = this.plot.getDataset();
         Number dataMin = data.getMinValue();
         Number dataMax = data.getMaxValue();
-        Set uniqueValues = data.getUniqueValues();
+        Set uniqueValues = data.data.getUniqueValues(data);
         if (uniqueValues.size() <= this.paintLimit) {
             int count = 0; // assign a color for each unique value
             for (Iterator i = uniqueValues.iterator(); i.hasNext();) {

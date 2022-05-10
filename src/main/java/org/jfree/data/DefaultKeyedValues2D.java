@@ -37,9 +37,7 @@
 package org.jfree.data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.jfree.chart.internal.CloneUtils;
 import org.jfree.chart.internal.Args;
@@ -552,6 +550,26 @@ public class DefaultKeyedValues2D<R extends Comparable<R>, C extends Comparable<
         // but the row data requires a deep copy
         clone.rows = CloneUtils.cloneList(this.rows);
         return clone;
+    }
+
+    /**
+     * Returns the set of unique values.
+     *
+     * @return The set of unique values.
+     * @param waferMapDataset
+     */
+    public Set getUniqueValues(WaferMapDataset waferMapDataset) {
+        Set unique = new TreeSet();
+        //step through all the values and add them to the hash
+        for (int r = 0; r < getRowCount(); r++) {
+            for (int c = 0; c < getColumnCount(); c++) {
+                Number value = getValue(r, c);
+                if (value != null) {
+                    unique.add(value);
+                }
+            }
+        }
+        return unique;
     }
 
     /**
