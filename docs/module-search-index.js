@@ -1,1 +1,0 @@
-moduleSearchIndex = [{"l":"org.jfree.chart"}];updateSearchResults();
